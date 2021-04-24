@@ -29,11 +29,20 @@ enum class ELevelGridCellOpened : uint8
 UENUM()
 enum class EWall : uint8
 {
-	None,
 	Top,
 	Right,
 	Bottom,
 	Left,
+	Count UMETA(Hidden)
+};
+/*----------------------------------------------------------------------------------------------------*/
+UENUM()
+enum class ETileState : uint8
+{
+	None,
+	Path,
+	Start,
+	End,
 	Count UMETA(Hidden)
 };
 /*----------------------------------------------------------------------------------------------------*/
