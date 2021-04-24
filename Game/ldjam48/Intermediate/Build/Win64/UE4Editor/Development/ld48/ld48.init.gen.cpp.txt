@@ -1,3 +1,0 @@
-D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\UE4Editor\Development\ld48\Definitions.ld48.h
-Y:\Program Files\Epic Games\UE_4.26\Engine\Source\Runtime\CoreUObject\Public\UObject/GeneratedCppIncludes.h
-Y:\Program Files\Epic Games\UE_4.26\Engine\Source\Runtime\CoreUObject\Public\UObject/MetaData.h

@@ -1,9 +1,0 @@
-D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\UE4Editor\Development\ld48\Definitions.ld48.h
-Y:\Program Files\Epic Games\UE_4.26\Engine\Source\Runtime\CoreUObject\Public\UObject/GeneratedCppIncludes.h
-Y:\Program Files\Epic Games\UE_4.26\Engine\Source\Runtime\CoreUObject\Public\UObject/MetaData.h
-D:\Code\ldjam\ludum-dare-48\ld48\Source\ld48/ld48GameModeBase.h
-Y:\Program Files\Epic Games\UE_4.26\Engine\Source\Runtime\Engine\Classes\GameFramework/GameModeBase.h
-Y:\Program Files\Epic Games\UE_4.26\Engine\Source\Runtime\Engine\Classes\Engine/ServerStatReplicator.h
-Y:\Program Files\Epic Games\UE_4.26\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\ServerStatReplicator.generated.h
-Y:\Program Files\Epic Games\UE_4.26\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\GameModeBase.generated.h
-d:\code\ldjam\ludum-dare-48\ld48\intermediate\build\win64\ue4editor\inc\ld48\ld48GameModeBase.generated.h
