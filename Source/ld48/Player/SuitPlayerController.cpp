@@ -30,6 +30,28 @@ void ASuitPlayerController::SetupInputComponent()
 void ASuitPlayerController::Tick(float deltaSeconds)
 {
 	Super::Tick(deltaSeconds);
+
+	if (_movementComponent == nullptr || _isInGame == false)
+	{
+		return;
+	}
+
+	if (_playerState != EMovablePawnState::Attacking)
+	{
+		float currentAccelerationX = _movementComponent->GetCurrentAcceleration().X;
+		float currentAccelerationZ = _movementComponent->GetCurrentAcceleration().Z;
+
+		if (currentAccelerationX != 0.f || currentAccelerationZ != 0)
+		{
+			SetPlayerState(EMovablePawnState::Walking);
+		}
+		else if (currentAccelerationX == 0.f && currentAccelerationZ == 0)
+		{
+			SetPlayerState(EMovablePawnState::Idle);
+		}
+	}
+
+	MovePlayer();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayerController::OnPossess(APawn* possesedPawn)
@@ -247,6 +269,14 @@ void ASuitPlayerController::UpdateDirection()
 			SetPlayerDirection(EMovablePawnDirection::Right);
 			break;
 		}
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayerController::MovePlayer()
+{
+	if (ASuitPlayer* player = Cast<ASuitPlayer>(_owningPlayer))
+	{
+		player->AddMovementInput(_movementVector);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

@@ -54,6 +54,8 @@ private:
 	void UpdateMovementVector();
 	void UpdateDirection();
 
+	void MovePlayer();
+
 	void Reset();
 
 private:
