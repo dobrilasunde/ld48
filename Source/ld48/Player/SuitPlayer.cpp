@@ -2,6 +2,9 @@
 /*----------------------------------------------------------------------------------------------------*/
 #include "SuitPlayer.h"
 #include "PaperFlipbookComponent.h"
+#include <Kismet/GameplayStatics.h>
+#include <Camera/PlayerCameraManager.h>
+#include "../Camera/PixelCamera.h"
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection)
 {
@@ -109,5 +112,43 @@ void ASuitPlayer::StartWalk()
 void ASuitPlayer::StopWalk()
 {
 
+}
+/*----------------------------------------------------------------------------------------------------*/
+/*override*/
+void ASuitPlayer::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (APlayerCameraManager* camManager = UGameplayStatics::GetPlayerCameraManager(this, 0))
+	{
+		AActor* a = camManager->GetViewTarget();
+		if (a == nullptr)
+		{
+			;
+		}
+		if (APixelCamera* cam = Cast<APixelCamera>(a))
+		{
+			cam->SetTargetActor(this);
+		}
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+/*override*/
+void ASuitPlayer::PossessedBy(AController* newController)
+{
+	Super::PossessedBy(newController);
+
+	if (APlayerCameraManager* camManager = UGameplayStatics::GetPlayerCameraManager(this, 0))
+	{
+		AActor* a = camManager->GetViewTarget();
+		if (a == nullptr)
+		{
+			;
+		}
+		if (APixelCamera* cam = Cast<APixelCamera>(a))
+		{
+			cam->SetTargetActor(this);
+		}
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/

@@ -20,6 +20,11 @@ public:
 	void StartWalk();
 	void StopWalk();
 
+// ACharacter
+public:
+	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* newController) override;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
 	UPaperFlipbook* _idleDownFlipbook;
