@@ -127,7 +127,29 @@ void ASuitPlayerController::OnPlayerDirectionChanged()
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayerController::OnPlayerStateChanged()
 {
+	ASuitPlayer* player = Cast<ASuitPlayer>(_owningPlayer);
+	if (player == nullptr)
+	{
+		return;
+	}
 
+	player->SetFlipbook(_playerState, _playerDirection);
+
+	switch (_playerState)
+	{
+	case EMovablePawnState::None:
+		player->StopWalk();
+		break;
+	case EMovablePawnState::Idle:
+		player->StopWalk();
+		break;
+	case EMovablePawnState::Walking:
+		player->StartWalk();
+		break;
+	case EMovablePawnState::Attacking:
+		player->StopWalk();
+		break;
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayerController::InputComponent_OnUpPressed()

@@ -16,6 +16,10 @@ class LD48_API ASuitPlayer : public APaperCharacter
 public:
 	void SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection);
 
+	void Attack();
+	void StartWalk();
+	void StopWalk();
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
 	UPaperFlipbook* _idleDownFlipbook;
