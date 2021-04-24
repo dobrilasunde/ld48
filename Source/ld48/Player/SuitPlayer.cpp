@@ -1,3 +1,98 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 /*----------------------------------------------------------------------------------------------------*/
 #include "SuitPlayer.h"
+#include "PaperFlipbookComponent.h"
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection)
+{
+	UPaperFlipbookComponent* flipbook = GetSprite();
+	if (flipbook == nullptr)
+	{
+		return;
+	}
+
+	if (playerState == EMovablePawnState::Idle)
+	{
+		switch (playerDirection)
+		{
+		case EMovablePawnDirection::Right:
+		{
+			if (_idleRightFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_idleRightFlipbook);
+				flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+			}
+			break;
+		}
+		case EMovablePawnDirection::Left:
+		{
+			if (_idleLeftFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_idleLeftFlipbook);
+				flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+			}
+			break;
+		}
+		case EMovablePawnDirection::Back:
+		{
+			if (_idleUpFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_idleUpFlipbook);
+			}
+			break;
+		}
+		case EMovablePawnDirection::Front:
+		{
+			if (_idleDownFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_idleDownFlipbook);
+			}
+			break;
+		}
+		}
+	}
+	else if (playerState == EMovablePawnState::Walking)
+	{
+		switch (playerDirection)
+		{
+		case EMovablePawnDirection::Right:
+		{
+			if (_walkRightFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_walkRightFlipbook);
+				flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+			}
+			break;
+		}
+		case EMovablePawnDirection::Left:
+		{
+			if (_walkLeftFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_walkLeftFlipbook);
+				flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+			}
+			break;
+		}
+		case EMovablePawnDirection::Back:
+		{
+			if (_walkUpFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_walkUpFlipbook);
+			}
+			break;
+		}
+		case EMovablePawnDirection::Front:
+		{
+			if (_walkDownFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_walkDownFlipbook);
+			}
+			break;
+		}
+		}
+	}
+	else if (playerState == EMovablePawnState::Attacking)
+	{
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
