@@ -9,8 +9,17 @@
 /*----------------------------------------------------------------------------------------------------*/
 struct FCell
 {
-	bool IsPath = false;
+	ETileState TileState = ETileState::None;
 	ELevelGridCellOpened LevelGridCellOpening = ELevelGridCellOpened::None;
+
+	std::vector<FCell*> Adjacent;
+	FCell* Parent;
+	float f;
+	float g;
+	float h;
+	bool InOpenSet;
+	bool InClosedSet;
+	bool Blocked;
 };
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
@@ -24,18 +33,26 @@ public:
 	FCell* GetStartCell() const;
 	FCell* GetEndCell() const;
 
+	bool FindPath(FCell* start,FCell* goal);
+	void UpdatePathTiles(FCell* start);
+
+	const std::vector<std::vector<FCell>>& GetGrid() const;
+
+public:
+	UPROPERTY(EditAnywhere)
+	int32 RowNum = 4;
+	UPROPERTY(EditAnywhere)
+	int32 ColNum = 4;
+
 private:
-	void GenerateStartCell();
-	void GenerateEndCell();
+	void GenerateStartEndCell();
 
+	EWall ChooseRandomWall();
 
 private:
-	int32 _rowNum = 4;
-	int32 _colNum = 4;
-
 	std::vector<std::vector<FCell>> _grid;
 
-	FCell* _startCell;
-	FCell* _endCell;
+	FCell* _startCell = nullptr;
+	FCell* _endCell = nullptr;
 };
 /*----------------------------------------------------------------------------------------------------*/
