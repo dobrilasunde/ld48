@@ -1,0 +1,7 @@
+D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\UE4Editor\Development\ld48\Definitions.ld48.h
+d:\code\ldjam\ludum-dare-48\ld48\source\ld48\ld48GameModeBase.h
+Y:\Program Files\Epic Games\UE_4.26\Engine\Source\Runtime\Engine\Classes\GameFramework/GameModeBase.h
+Y:\Program Files\Epic Games\UE_4.26\Engine\Source\Runtime\Engine\Classes\Engine/ServerStatReplicator.h
+Y:\Program Files\Epic Games\UE_4.26\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\ServerStatReplicator.generated.h
+Y:\Program Files\Epic Games\UE_4.26\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\GameModeBase.generated.h
+D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\UE4Editor\Inc\ld48\ld48GameModeBase.generated.h

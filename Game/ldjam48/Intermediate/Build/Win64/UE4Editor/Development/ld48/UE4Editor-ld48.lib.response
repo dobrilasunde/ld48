@@ -1,0 +1,16 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-ld48.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\ld48Editor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\UE4Editor\Development\ld48\ld48.cpp.obj"
+"D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\UE4Editor\Development\ld48\ld48GameModeBase.cpp.obj"
+"D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\UE4Editor\Development\ld48\ld48.init.gen.cpp.obj"
+"D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\UE4Editor\Development\ld48\ld48GameModeBase.gen.cpp.obj"
+"D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\UE4Editor\Development\ld48\Default.rc2.res"
+/OUT:"D:\Code\ldjam\ludum-dare-48\ld48\Intermediate\Build\Win64\UE4Editor\Development\ld48\UE4Editor-ld48.lib"
+/INCLUDE:IMPLEMENT_MODULE_ld48
