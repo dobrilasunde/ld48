@@ -16,17 +16,6 @@ enum class ELevelName : uint8
 };
 /*----------------------------------------------------------------------------------------------------*/
 UENUM()
-enum class ELevelGridCellOpened : uint8
-{
-	None,
-	Top,
-	Right,
-	Bottom,
-	Left,
-	Count UMETA(Hidden)
-};
-/*----------------------------------------------------------------------------------------------------*/
-UENUM()
 enum class EWall : uint8
 {
 	Top,

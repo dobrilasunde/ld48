@@ -12,7 +12,6 @@
 struct FCell
 {
 	ETileState TileState = ETileState::None;
-	ELevelGridCellOpened LevelGridCellOpening = ELevelGridCellOpened::None;
 
 	bool IsLeftOpen = false;
 	bool IsRightOpen = false;
@@ -67,7 +66,7 @@ private:
 
 	EWall ChooseRandomWall();
 
-	ELevelGridCellOpened DetermineOpenedSide(FCell* Cell);
+	void DetermineOpenedSides(FCell* Cell);
 
 	TSubclassOf<ALevelGridCell> GetRandomCellClass() const;
 	ALevelGridCell* SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz);

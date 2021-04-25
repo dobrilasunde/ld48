@@ -198,17 +198,13 @@ bool ALevelGridGenerator::FindPath(FCell* start, FCell* goal)
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridGenerator::UpdatePathTiles(FCell* start)
 {
-	ELevelGridCellOpened OpenedSide = DetermineOpenedSide(start);
-	start->LevelGridCellOpening = OpenedSide;
+	 DetermineOpenedSides(start);
 
 	FCell* t = start->Parent;
 	while (t != GetEndCell())
 	{
-		t->TileState = ETileState::Path;
-		
-		OpenedSide = DetermineOpenedSide(start);
-		t->LevelGridCellOpening = OpenedSide;
-
+		t->TileState = ETileState::Path;	
+		DetermineOpenedSides(start);
 		t = t->Parent;
 	}
 }
@@ -259,35 +255,42 @@ EWall ALevelGridGenerator::ChooseRandomWall()
 	return RandomWall;
 }
 /*----------------------------------------------------------------------------------------------------*/
-ELevelGridCellOpened ALevelGridGenerator::DetermineOpenedSide(FCell* Cell)
+void ALevelGridGenerator::DetermineOpenedSides(FCell* Cell)
 {
 	if (Cell == nullptr)
 	{
-		return ELevelGridCellOpened::None;
+		return;
 	}
-	if (Cell->Parent == nullptr)
+	
+	int32 i = Cell->y;
+	int32 j = Cell->x;
+
+	if (i < 0 || j < 0 || i >= RowNum || j >= ColNum)
 	{
-		return ELevelGridCellOpened::None;
+		return;
 	}
 
-	if (Cell->y == Cell->Parent->y && Cell->x > Cell->Parent->x)
-	{
-		return ELevelGridCellOpened::Top;
-	}
-	else if (Cell->y == Cell->Parent->y && Cell->x < Cell->Parent->x)
-	{
-		return ELevelGridCellOpened::Bottom;
-	}
-	else if (Cell->x == Cell->Parent->x && Cell->y > Cell->Parent->y)
-	{
-		return ELevelGridCellOpened::Left;
-	}
-	else if (Cell->x == Cell->Parent->x && Cell->y < Cell->Parent->y)
-	{
-		return ELevelGridCellOpened::Right;
-	}
+	FCell* topCell = (i-1 >= 0)  ? &_grid[i-1][j] : nullptr;
+	FCell* bottomCell = (i + 1 < RowNum) ? &_grid[i + 1][j] : nullptr;
+	FCell* leftCell = (j - 1 >= 0) ? &_grid[i][j - 1] : nullptr;
+	FCell* rightCell = (j + 1 < ColNum) ? &_grid[i][j + 1] : nullptr;
 
-	return ELevelGridCellOpened::None;
+	{
+	if (topCell && (topCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
+		Cell->IsTopOpen = true;
+	}
+	if (bottomCell && (bottomCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
+	{
+		Cell->IsBottomOpen = true;
+	}
+	if (leftCell && (leftCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
+	{
+		Cell->IsLeftOpen = true;
+	}
+	if (rightCell && (rightCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
+	{
+		Cell->IsRightOpen = true;
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 TSubclassOf<ALevelGridCell> ALevelGridGenerator::GetRandomCellClass() const
@@ -304,7 +307,7 @@ ALevelGridCell* ALevelGridGenerator::SpawnCell(FVector location, TSubclassOf<ALe
 {
 	if (clazz == nullptr)
 	{
-		return;
+		return nullptr;
 	}
 
 	return GetWorld()->SpawnActor<ALevelGridCell>(clazz, FTransform(location));
