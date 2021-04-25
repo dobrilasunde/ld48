@@ -7,6 +7,7 @@
 #include "SuitPlayer.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class UBoxComponent;
+class UMatineeCameraShake;
 class UPaperFlipbook;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
@@ -19,9 +20,11 @@ public:
 
 	void SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection);
 
-	void OnMeleeAttackAnimationFinishedPlaying();
 	void StartWalk();
 	void StopWalk();
+
+	void MeleeAttack(EMovablePawnDirection attackDirection);
+	void OnMeleeAttackAnimationFinishedPlaying();
 
 	UPaperFlipbookComponent* GetMeleeAttackFlipbookComponent() const;
 
@@ -32,6 +35,9 @@ public:
 
 protected:
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	void ShakeCamera();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
@@ -66,6 +72,13 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* _meleeAttackHitBox;
+
+private:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UMatineeCameraShake> _verticalCameraShake;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UMatineeCameraShake> _horizontalCameraShake;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Suit")

@@ -44,7 +44,7 @@ private:
 	void InputComponent_OnLeftReleased();
 	void InputComponent_OnRightReleased();
 
-	void InputComponent_OnAttackPressed();
+	void InputComponent_OnMeleeAttackPressed();
 
 	void AddVerticalMovementInput(const EMovementInput& input);
 	void RemoveVerticalMovementInput(const EMovementInput& input);

@@ -6,6 +6,9 @@
 #include <Components/BoxComponent.h>
 #include <Kismet/GameplayStatics.h>
 #include "PaperFlipbookComponent.h"
+#include "../NPC/NPC.h"
+#include "SuitPlayerController.h"
+#include <Camera/CameraShake.h>
 /*----------------------------------------------------------------------------------------------------*/
 ASuitPlayer::ASuitPlayer()
 {
@@ -149,6 +152,30 @@ void ASuitPlayer::StopWalk()
 
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::MeleeAttack(EMovablePawnDirection attackDirection)
+{
+	if (_meleeAttackHitBox == nullptr)
+	{
+		return;
+	}
+
+	TArray<AActor*> overlappingActors;
+	_meleeAttackHitBox->GetOverlappingActors(overlappingActors);
+	for (AActor* overlappingActor : overlappingActors)
+	{
+		if (ANPC* npc = Cast<ANPC>(overlappingActor))
+		{
+			if (npc->GetHealth() > 0.f)
+			{
+				npc->ApplyDamage(attackDirection);
+				ShakeCamera();
+				return;
+			}
+		}
+		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, *overlappingActor->GetName());
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
 UPaperFlipbookComponent* ASuitPlayer::GetMeleeAttackFlipbookComponent() const
 {
 	return _meleeAttackFlipbookComponent;
@@ -202,5 +229,34 @@ void ASuitPlayer::Tick(float DeltaTime)
 	location.X = FMath::GridSnap(location.X, unitsPerPixel);
 	location.Z = FMath::GridSnap(location.Z, unitsPerPixel);
 	SetActorLocation(location);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::ShakeCamera()
+{
+	if (_verticalCameraShake == nullptr || _horizontalCameraShake == nullptr)
+	{
+		return;
+	}
+
+	ASuitPlayerController* PlayerController = Cast<ASuitPlayerController>(GetController());
+	if (PlayerController == nullptr)
+	{
+		return;
+	}
+
+	APlayerCameraManager* PlayerCameraManager = PlayerController->PlayerCameraManager;
+	if (PlayerCameraManager == nullptr)
+	{
+		return;
+	}
+
+	if (PlayerController->GetPlayerDirection() == EMovablePawnDirection::Left || PlayerController->GetPlayerDirection() == EMovablePawnDirection::Right)
+	{
+		PlayerCameraManager->PlayCameraShake(_horizontalCameraShake, 1.0f);
+	}
+	else
+	{
+		PlayerCameraManager->PlayCameraShake(_verticalCameraShake, 1.0f);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/

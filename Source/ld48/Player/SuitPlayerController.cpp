@@ -25,7 +25,7 @@ void ASuitPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Left", EInputEvent::IE_Released, this, &ASuitPlayerController::InputComponent_OnLeftReleased);
 	InputComponent->BindAction("Right", EInputEvent::IE_Released, this, &ASuitPlayerController::InputComponent_OnRightReleased);
 
-	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ASuitPlayerController::InputComponent_OnAttackPressed);
+	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ASuitPlayerController::InputComponent_OnMeleeAttackPressed);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayerController::Tick(float deltaSeconds)
@@ -235,7 +235,7 @@ void ASuitPlayerController::InputComponent_OnRightReleased()
 	UpdateDirection();
 }
 /*----------------------------------------------------------------------------------------------------*/
-void ASuitPlayerController::InputComponent_OnAttackPressed()
+void ASuitPlayerController::InputComponent_OnMeleeAttackPressed()
 {
 	if (_playerState == EMovablePawnState::Attacking)
 	{
@@ -249,7 +249,11 @@ void ASuitPlayerController::InputComponent_OnAttackPressed()
 
 	//ResetMovement();
 	SetPlayerState(EMovablePawnState::Attacking);
-	AttackScan();
+	
+	if (ASuitPlayer* player = Cast<ASuitPlayer>(_owningPlayer))
+	{
+		player->MeleeAttack(_playerDirection);
+	}
 
 	_attackDelayTimer = 0.0f;
 }
