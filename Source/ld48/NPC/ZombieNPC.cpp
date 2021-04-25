@@ -4,6 +4,7 @@
 #include "../Player/SuitPlayer.h"
 #include "../Player/SuitPlayerController.h"
 #include "Components/CapsuleComponent.h"
+#include "../Player/Projectile.h"
 /*----------------------------------------------------------------------------------------------------*/
 AZombieNPC::AZombieNPC(): Super()
 {
@@ -58,21 +59,9 @@ void AZombieNPC::AttackTarget(AActor* target)
 /*----------------------------------------------------------------------------------------------------*/
 void AZombieNPC::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
 {
-	if (otherActor == nullptr && otherActor == this && otherComp == nullptr)
+	if (AProjectile* projectile = Cast<AProjectile>(otherActor))
 	{
-		return;
-	}
-
-	if (ASuitPlayer* player = Cast<ASuitPlayer>(otherActor))
-	{
-		if (ASuitPlayerController* playerController = Cast<ASuitPlayerController>(player->GetController()))
-		{
-			//playerController->ApplyDamage(GetNPCDirection(), GetAttackDamage());
-			if (ANPC* owner = Cast<ANPC>(GetOwner()))
-			{
-				owner->OnNPCAttackedTarget.Broadcast(player);
-			}
-		}
+		Destroy();
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

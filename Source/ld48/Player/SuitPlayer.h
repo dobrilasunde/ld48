@@ -10,6 +10,7 @@ class UBoxComponent;
 class UMatineeCameraShake;
 class UPaperFlipbook;
 class UPlayerGunComponent;
+class UMaterialInstanceDynamic;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LD48_API ASuitPlayer : public APaperCharacter
@@ -30,10 +31,11 @@ public:
 
 	UPaperFlipbookComponent* GetMeleeAttackFlipbookComponent() const;
 
+	void ApplyDamage(float damage);
+
 // ACharacter
 public:
 	virtual void BeginPlay() override;
-	virtual void PossessedBy(AController* newController) override;
 
 protected:
 	virtual void Tick(float DeltaTime) override;
@@ -41,11 +43,20 @@ protected:
 private:
 	void ShakeCamera();
 
+	UFUNCTION()
+	void OnInvulnerabilityTimer();
+
 private:
 	UPROPERTY(EditAnywhere)
 	UPlayerGunComponent* _gunComponent;
 
 private:
+	UPROPERTY(EditAnywhere, Category = "Player|Material")
+	UMaterialInterface* _spriteMaterial;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Damage")
+	float _invulnerabilityOnDamageDuration = 0.f;
+
 	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
 	UPaperFlipbook* _idleDownFlipbook;
 
@@ -89,5 +100,13 @@ private:
 private:
 	UPROPERTY(EditAnywhere, Category = "Suit")
 	float _pixelsPerUnit = 1.f;
+
+private:
+	UPROPERTY();
+	UMaterialInstanceDynamic* _spriteMatInst;
+
+	bool _canTakeDamage = true;
+
+	FTimerHandle _invulnerabilityTimer;
 };
 /*----------------------------------------------------------------------------------------------------*/
