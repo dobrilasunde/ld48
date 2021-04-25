@@ -19,13 +19,13 @@ void ALevelGridCell::SetLeftEdgeType(ECellEdgeType type)
 
 	if (type == ECellEdgeType::Wall)
 	{
-		_leftEdgeComp_Wall->SetHiddenInGame(true);
-		_leftEdgeComp_Passage->SetHiddenInGame(false);
+		_leftEdgeComp_Wall->SetHiddenInGame(false);
+		_leftEdgeComp_Passage->SetHiddenInGame(true);
 	}
 	else if (type == ECellEdgeType::Passage)
 	{
-		_leftEdgeComp_Wall->SetHiddenInGame(false);
-		_leftEdgeComp_Passage->SetHiddenInGame(true);
+		_leftEdgeComp_Wall->SetHiddenInGame(true);
+		_leftEdgeComp_Passage->SetHiddenInGame(false);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -38,13 +38,13 @@ void ALevelGridCell::SetRighttEdgeType(ECellEdgeType type)
 
 	if (type == ECellEdgeType::Wall)
 	{
-		_rightEdgeComp_Wall->SetHiddenInGame(true);
-		_rightEdgeComp_Passage->SetHiddenInGame(false);
+		_rightEdgeComp_Wall->SetHiddenInGame(false);
+		_rightEdgeComp_Passage->SetHiddenInGame(true);
 	}
 	else if (type == ECellEdgeType::Passage)
 	{
-		_rightEdgeComp_Wall->SetHiddenInGame(false);
-		_rightEdgeComp_Passage->SetHiddenInGame(true);
+		_rightEdgeComp_Wall->SetHiddenInGame(true);
+		_rightEdgeComp_Passage->SetHiddenInGame(false);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -57,13 +57,13 @@ void ALevelGridCell::SetTopEdgeType(ECellEdgeType type)
 
 	if (type == ECellEdgeType::Wall)
 	{
-		_TopEdgeComp_Wall->SetHiddenInGame(true);
-		_topEdgeComp_Passage->SetHiddenInGame(false);
+		_TopEdgeComp_Wall->SetHiddenInGame(false);
+		_topEdgeComp_Passage->SetHiddenInGame(true);
 	}
 	else if (type == ECellEdgeType::Passage)
 	{
-		_TopEdgeComp_Wall->SetHiddenInGame(false);
-		_topEdgeComp_Passage->SetHiddenInGame(true);
+		_TopEdgeComp_Wall->SetHiddenInGame(true);
+		_topEdgeComp_Passage->SetHiddenInGame(false);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -76,13 +76,13 @@ void ALevelGridCell::SetBottomEdgeType(ECellEdgeType type)
 
 	if (type == ECellEdgeType::Wall)
 	{
-		_bottomEdgeComp_Wall->SetHiddenInGame(true);
-		_bottomEdgeComp_Passage->SetHiddenInGame(false);
+		_bottomEdgeComp_Wall->SetHiddenInGame(false);
+		_bottomEdgeComp_Passage->SetHiddenInGame(true);
 	}
 	else if (type == ECellEdgeType::Passage)
 	{
-		_bottomEdgeComp_Wall->SetHiddenInGame(false);
-		_bottomEdgeComp_Passage->SetHiddenInGame(true);
+		_bottomEdgeComp_Wall->SetHiddenInGame(true);
+		_bottomEdgeComp_Passage->SetHiddenInGame(false);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

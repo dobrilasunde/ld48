@@ -26,7 +26,7 @@ void ALevelGridGenerator::BeginPlay()
 				cell.TileState == ETileState::Start ||
 				cell.TileState == ETileState::End)
 			{
-				FVector cellLocation = rootLocation + FVector(CellBaseSize.X * x, 0.f, CellBaseSize.Z * y);
+				FVector cellLocation = rootLocation + FVector(CellBaseSize.X * x, 0.f, -CellBaseSize.Z * y);
 				if (ALevelGridCell* cellActor = SpawnCell(cellLocation, GetRandomCellClass()))
 				{
 					cellActor->SetLeftEdgeType(cell.IsLeftOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
@@ -265,7 +265,7 @@ void ALevelGridGenerator::DetermineOpenedCellSides()
 		return;
 	}
 
-	while (Cell != GetEndCell())
+	while (Cell != nullptr)
 	{
 		int32 i = Cell->y;
 		int32 j = Cell->x;
