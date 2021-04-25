@@ -27,7 +27,9 @@ void ALevelGridGenerator::BeginPlay()
 				cell.TileState == ETileState::End)
 			{
 				FVector cellLocation = rootLocation + FVector(CellBaseSize.X * x, 0.f, CellBaseSize.Z * y);
-				SpawnCell(cellLocation, GetRandomCellClass());
+				if (ALevelGridCell* cellActor = SpawnCell(cellLocation, GetRandomCellClass()))
+				{
+				}
 				row += "x";
 			}
 			else
@@ -98,18 +100,6 @@ void ALevelGridGenerator::Initialize()
 			}
 		}
 	}
-
-	/*for (int32 y = 0; y < ColNum; ++y)
-	{
-		for (int32 x = 0; x < RowNum; ++x)
-		{
-			UE_LOG(LogTemp, Log, TEXT("CELL x = %d y = %d"), _grid[y][x].x, _grid[y][x].y);
-			for (const FCell* adj : _grid[y][x].Adjacent)
-			{
-				UE_LOG(LogTemp, Log, TEXT("_____CELL x = %d y = %d"), adj->x, adj->y);
-			}
-		}
-	}*/
 
 	bool succ = FindPath(GetEndCell(), GetStartCell());
 	UE_LOG(LogTemp, Log, TEXT("success = %d"), succ);
@@ -310,13 +300,13 @@ TSubclassOf<ALevelGridCell> ALevelGridGenerator::GetRandomCellClass() const
 	return PossibleCellClasses[FMath::RandRange(0, PossibleCellClasses.Num() - 1)];
 }
 /*----------------------------------------------------------------------------------------------------*/
-void ALevelGridGenerator::SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz)
+ALevelGridCell* ALevelGridGenerator::SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz)
 {
 	if (clazz == nullptr)
 	{
 		return;
 	}
 
-	GetWorld()->SpawnActor<ALevelGridCell>(clazz, FTransform(location));
+	return GetWorld()->SpawnActor<ALevelGridCell>(clazz, FTransform(location));
 }
 /*----------------------------------------------------------------------------------------------------*/

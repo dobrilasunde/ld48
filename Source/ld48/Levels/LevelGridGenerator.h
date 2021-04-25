@@ -14,6 +14,11 @@ struct FCell
 	ETileState TileState = ETileState::None;
 	ELevelGridCellOpened LevelGridCellOpening = ELevelGridCellOpened::None;
 
+	bool IsLeftOpen = false;
+	bool IsRightOpen = false;
+	bool IsTopOpen = false;
+	bool IsBottomOpen = false;
+
 	std::vector<FCell*> Adjacent;
 	FCell* Parent = nullptr;
 	float f = 0.0f;
@@ -25,12 +30,6 @@ struct FCell
 
 	int32 x = -1;
 	int32 y = -1;
-
-public:
-	std::string ToString() const 
-	{
-		return "test";
-	}
 };
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
@@ -71,7 +70,7 @@ private:
 	ELevelGridCellOpened DetermineOpenedSide(FCell* Cell);
 
 	TSubclassOf<ALevelGridCell> GetRandomCellClass() const;
-	void SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz);
+	ALevelGridCell* SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz);
 
 private:
 	std::vector<std::vector<FCell>> _grid;
