@@ -9,6 +9,7 @@
 #include "../NPC/NPC.h"
 #include "SuitPlayerController.h"
 #include <Camera/CameraShake.h>
+#include "PlayerGunComponent.h"
 /*----------------------------------------------------------------------------------------------------*/
 ASuitPlayer::ASuitPlayer()
 {
@@ -22,6 +23,9 @@ ASuitPlayer::ASuitPlayer()
 
 	_meleeAttackHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("MeleeHitBox"));
 	_meleeAttackHitBox->SetupAttachment(_meleeAttackFlipbookComponent);
+
+	_gunComponent = CreateDefaultSubobject<UPlayerGunComponent>(TEXT("GunComponent"));
+	_gunComponent->SetupAttachment(RootComponent);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection)
@@ -173,6 +177,20 @@ void ASuitPlayer::MeleeAttack(EMovablePawnDirection attackDirection)
 			}
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, *overlappingActor->GetName());
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::Shoot(EMovablePawnDirection attackDirection)
+{
+	if (_gunComponent != nullptr)
+	{
+		FVector direction = GetActorForwardVector();
+		if (attackDirection == EMovablePawnDirection::Left)
+		{
+			direction *= -1.f;
+		}
+
+		_gunComponent->Shoot(direction);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

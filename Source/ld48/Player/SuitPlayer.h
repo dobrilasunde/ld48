@@ -9,6 +9,7 @@
 class UBoxComponent;
 class UMatineeCameraShake;
 class UPaperFlipbook;
+class UPlayerGunComponent;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LD48_API ASuitPlayer : public APaperCharacter
@@ -24,6 +25,7 @@ public:
 	void StopWalk();
 
 	void MeleeAttack(EMovablePawnDirection attackDirection);
+	void Shoot(EMovablePawnDirection attackDirection);
 	void OnMeleeAttackAnimationFinishedPlaying();
 
 	UPaperFlipbookComponent* GetMeleeAttackFlipbookComponent() const;
@@ -38,6 +40,10 @@ protected:
 
 private:
 	void ShakeCamera();
+
+private:
+	UPROPERTY(EditAnywhere)
+	UPlayerGunComponent* _gunComponent;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")

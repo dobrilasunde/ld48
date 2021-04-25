@@ -26,6 +26,7 @@ void ASuitPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Right", EInputEvent::IE_Released, this, &ASuitPlayerController::InputComponent_OnRightReleased);
 
 	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ASuitPlayerController::InputComponent_OnMeleeAttackPressed);
+	InputComponent->BindAction("Shoot", EInputEvent::IE_Pressed, this, &ASuitPlayerController::InputComponent_OnShootAttackPressed);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayerController::Tick(float deltaSeconds)
@@ -256,6 +257,14 @@ void ASuitPlayerController::InputComponent_OnMeleeAttackPressed()
 	}
 
 	_attackDelayTimer = 0.0f;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayerController::InputComponent_OnShootAttackPressed()
+{
+	if (ASuitPlayer* player = Cast<ASuitPlayer>(_owningPlayer))
+	{
+		player->Shoot(_playerDirection);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayerController::AddVerticalMovementInput(const EMovementInput& input)
