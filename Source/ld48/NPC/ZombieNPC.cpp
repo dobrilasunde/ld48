@@ -29,17 +29,31 @@ void AZombieNPC::BeginPlay()
 /*----------------------------------------------------------------------------------------------------*/
 void AZombieNPC::MoveToTarget(AActor* target)
 {
-	return;
+	ASuitPlayer* player = Cast<ASuitPlayer>(target);
+	if (player == nullptr)
+	{
+		return;
+	}
+
+	ASuitPlayerController* playerController = Cast<ASuitPlayerController>(player->GetController());
+	if (playerController == nullptr)
+	{
+		return;
+	}
+
+	TurnTowardsTarget(target);
+
+	Super::MoveToTarget(target);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AZombieNPC::OnArrivedToTarget(AActor* target)
 {
-	return;
+	Super::OnArrivedToTarget(target);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AZombieNPC::AttackTarget(AActor* target)
 {
-	return;
+	Super::AttackTarget(target);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AZombieNPC::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)

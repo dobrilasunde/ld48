@@ -165,6 +165,21 @@ void ANPC::OnDeathAnimationFinishedPlaying()
 	Destroy();
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ANPC::OnAttackAnimationFinishedPlaying()
+{
+	if (_attackFlipbook)
+	{
+		_attackFlipbook->SetHiddenInGame(true);
+	}
+
+	if (UPaperFlipbookComponent* flipbook = GetSprite())
+	{
+		flipbook->SetHiddenInGame(false);
+	}
+
+	SetNPCState(EMovablePawnState::Idle);
+}
+/*----------------------------------------------------------------------------------------------------*/
 UPaperFlipbookComponent* ANPC::GetAttackFlipbook() const
 {
 	return _attackFlipbook;
@@ -356,6 +371,21 @@ void ANPC::SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDire
 			}
 		}
 	}
+	else if (_npcState == EMovablePawnState::Attacking)
+	{
+		if (_npcDirection == EMovablePawnDirection::Left)
+		{
+			_attackFlipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+		}
+		else if (_npcDirection == EMovablePawnDirection::Right)
+		{
+			_attackFlipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+		}
+
+		flipbook->SetHiddenInGame(true);
+		_attackFlipbook->SetHiddenInGame(false);
+		_attackFlipbook->PlayFromStart();
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::Reset()
@@ -430,6 +460,11 @@ void ANPC::OnArrivedToTarget(AActor* target)
 /*virtual*/
 void ANPC::AttackTarget(AActor* target)
 {
+	if (_npcState == EMovablePawnState::Attacking)
+	{
+		return;
+	}
+
 	if (_attackDelayTimer < _attackDelay)
 	{
 		return;
@@ -447,6 +482,9 @@ void ANPC::AttackTarget(AActor* target)
 			//targetController->ApplyDamage(_npcDirection, _attackDamage);
 		}
 	}
+
+	//ResetMovement();
+	SetNPCState(EMovablePawnState::Attacking);
 
 	_attackDelayTimer = 0.0f;
 
@@ -589,6 +627,12 @@ void ANPC::BeginPlay()
 	if (_deathFlipbookComponent)
 	{
 		_deathFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ANPC::OnDeathAnimationFinishedPlaying);
+	}
+
+
+	if (_attackFlipbook)
+	{
+		_attackFlipbook->OnFinishedPlaying.AddDynamic(this, &ANPC::OnAttackAnimationFinishedPlaying);
 	}
 
 	_attackDelayTimer = _attackDelay;

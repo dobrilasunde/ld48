@@ -347,7 +347,7 @@ void ASuitPlayerController::OnMeleeAttackAnimationFinishedPlaying()
 		return;
 	}
 
-	player->MeleeAttack();
+	player->OnMeleeAttackAnimationFinishedPlaying();
 
 	SetPlayerState(EMovablePawnState::Idle);
 }

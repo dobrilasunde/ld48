@@ -87,6 +87,9 @@ private:
 	UFUNCTION()
 	void OnDeathAnimationFinishedPlaying();
 
+	UFUNCTION()
+	void OnAttackAnimationFinishedPlaying();
+
 protected:
 	float _health = 1.0f;
 

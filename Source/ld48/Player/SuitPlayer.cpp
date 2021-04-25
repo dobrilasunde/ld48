@@ -126,7 +126,7 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
-void ASuitPlayer::MeleeAttack()
+void ASuitPlayer::OnMeleeAttackAnimationFinishedPlaying()
 {
 	if (_meleeAttackFlipbookComponent)
 	{

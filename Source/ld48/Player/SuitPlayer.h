@@ -19,7 +19,7 @@ public:
 
 	void SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection);
 
-	void MeleeAttack();
+	void OnMeleeAttackAnimationFinishedPlaying();
 	void StartWalk();
 	void StopWalk();
 
