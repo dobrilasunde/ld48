@@ -17,8 +17,8 @@ void ALevelManager::BeginPlay()
 	// Init level locked status
 	_levelsLocked.Emplace(ELevelName::LevelOffice, false);
 	_levelsLocked.Emplace(ELevelName::LevelElevator, false);
-	_levelsLocked.Emplace(ELevelName::LevelGarage, true);
-	_levelsLocked.Emplace(ELevelName::LevelStairs, true);
+	_levelsLocked.Emplace(ELevelName::LevelGarage, false);
+	_levelsLocked.Emplace(ELevelName::LevelStairs, false);
 
 	SetCurrentLevel(_initialLevel);
 }

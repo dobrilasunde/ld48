@@ -2,6 +2,15 @@
 /*----------------------------------------------------------------------------------------------------*/
 #include "LevelGridCell.h"
 #include <PaperSpriteComponent.h>
+#include <Components/SceneComponent.h>
+/*----------------------------------------------------------------------------------------------------*/
+ALevelGridCell::ALevelGridCell()
+{
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+
+	_playerStartPosition = CreateDefaultSubobject<USceneComponent>(TEXT("PlayerStartPosition"));
+	_playerStartPosition->SetupAttachment(RootComponent);
+}
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridCell::BeginPlay()
 {
@@ -20,11 +29,13 @@ void ALevelGridCell::SetLeftEdgeType(ECellEdgeType type)
 	if (type == ECellEdgeType::Wall)
 	{
 		_leftEdgeComp_Wall->SetHiddenInGame(false);
+		_leftEdgeComp_Wall->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		_leftEdgeComp_Passage->SetHiddenInGame(true);
 	}
 	else if (type == ECellEdgeType::Passage)
 	{
 		_leftEdgeComp_Wall->SetHiddenInGame(true);
+		_leftEdgeComp_Wall->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		_leftEdgeComp_Passage->SetHiddenInGame(false);
 	}
 }
@@ -39,11 +50,13 @@ void ALevelGridCell::SetRighttEdgeType(ECellEdgeType type)
 	if (type == ECellEdgeType::Wall)
 	{
 		_rightEdgeComp_Wall->SetHiddenInGame(false);
+		_rightEdgeComp_Wall->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		_rightEdgeComp_Passage->SetHiddenInGame(true);
 	}
 	else if (type == ECellEdgeType::Passage)
 	{
 		_rightEdgeComp_Wall->SetHiddenInGame(true);
+		_rightEdgeComp_Wall->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		_rightEdgeComp_Passage->SetHiddenInGame(false);
 	}
 }
@@ -58,11 +71,13 @@ void ALevelGridCell::SetTopEdgeType(ECellEdgeType type)
 	if (type == ECellEdgeType::Wall)
 	{
 		_TopEdgeComp_Wall->SetHiddenInGame(false);
+		_TopEdgeComp_Wall->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		_topEdgeComp_Passage->SetHiddenInGame(true);
 	}
 	else if (type == ECellEdgeType::Passage)
 	{
 		_TopEdgeComp_Wall->SetHiddenInGame(true);
+		_TopEdgeComp_Wall->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		_topEdgeComp_Passage->SetHiddenInGame(false);
 	}
 }
@@ -77,13 +92,20 @@ void ALevelGridCell::SetBottomEdgeType(ECellEdgeType type)
 	if (type == ECellEdgeType::Wall)
 	{
 		_bottomEdgeComp_Wall->SetHiddenInGame(false);
+		_bottomEdgeComp_Wall->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		_bottomEdgeComp_Passage->SetHiddenInGame(true);
 	}
 	else if (type == ECellEdgeType::Passage)
 	{
 		_bottomEdgeComp_Wall->SetHiddenInGame(true);
+		_bottomEdgeComp_Wall->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		_bottomEdgeComp_Passage->SetHiddenInGame(false);
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+const FTransform& ALevelGridCell::GetPlayerStart() const
+{
+	return _playerStartPosition->GetComponentToWorld();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridCell::CollectComponents()

@@ -35,6 +35,13 @@ void ALevelGridGenerator::BeginPlay()
 					cellActor->SetRighttEdgeType(cell.IsRightOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
 					cellActor->SetTopEdgeType(cell.IsTopOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
 					cellActor->SetBottomEdgeType(cell.IsBottomOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
+
+					SpawnedCells.Push(cellActor);
+
+					if (cell.TileState == ETileState::Start)
+					{
+						_playerStartLocation = cellActor->GetPlayerStart().GetLocation();
+					}
 				}
 				row += "x";
 			}
@@ -49,6 +56,21 @@ void ALevelGridGenerator::BeginPlay()
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("\n%s"), *str);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelGridGenerator::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	for (ALevelGridCell* SpawnedCell : SpawnedCells)
+	{
+		SpawnedCell->Destroy();
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+const FVector& ALevelGridGenerator::GetPlayerStartLocation() const
+{
+	return _playerStartLocation;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridGenerator::Initialize()

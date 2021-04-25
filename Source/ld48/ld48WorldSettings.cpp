@@ -12,8 +12,3 @@ ALevelManager* Ald48WorldSettings::GetLevelManager() const
 	return _levelManager;
 }
 /*----------------------------------------------------------------------------------------------------*/
-ALevelGridGenerator* Ald48WorldSettings::GetLevelGridGenerator() const
-{
-	return _levelGridGenerator;
-}
-/*----------------------------------------------------------------------------------------------------*/

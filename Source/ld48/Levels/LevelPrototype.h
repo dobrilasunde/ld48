@@ -16,18 +16,17 @@ public:
 	ALevelPrototype();
 
 	void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	void Tick(float deltaTime) override;
 
 	const FVector& GetPlayerStartLocation() const;
 
 // Events
 public:
-
+	UPROPERTY(EditAnywhere, Category = "LevelPrototype")
+	FVector _defaultPlayerStartLocation = FVector(0.f, 5.f, 0.f);
 
 private:
-	UPROPERTY(EditAnywhere, Category = "LevelPrototype")
-	FVector _playerStartLocation = FVector(0.f, 5.f, 0.f);
-
 	UPROPERTY()
 	ALevelGridGenerator* _levelGridGenerator;
 

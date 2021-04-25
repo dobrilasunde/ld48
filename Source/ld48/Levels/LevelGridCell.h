@@ -13,6 +13,7 @@ enum class ECellEdgeType : uint8
 };
 /*----------------------------------------------------------------------------------------------------*/
 class UPaperSpriteComponent;
+class USceneComponent;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LD48_API ALevelGridCell : public AActor
@@ -39,12 +40,16 @@ public:
 	FString BottomEdgeName_Passage	= "BottomEdge_Passage";
 
 public:
+	ALevelGridCell();
+
 	virtual void BeginPlay() override;
 
 	void SetLeftEdgeType(ECellEdgeType type);
 	void SetRighttEdgeType(ECellEdgeType type);
 	void SetTopEdgeType(ECellEdgeType type);
 	void SetBottomEdgeType(ECellEdgeType type);
+
+	const FTransform& GetPlayerStart() const;
 
 private:
 	UPaperSpriteComponent* _leftEdgeComp_Wall;
@@ -56,6 +61,9 @@ private:
 	UPaperSpriteComponent* _rightEdgeComp_Passage;
 	UPaperSpriteComponent* _topEdgeComp_Passage;
 	UPaperSpriteComponent* _bottomEdgeComp_Passage;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* _playerStartPosition;
 
 private:
 	void CollectComponents();

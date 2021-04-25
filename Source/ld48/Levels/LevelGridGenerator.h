@@ -40,6 +40,9 @@ public:
 	ALevelGridGenerator();
 
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	const FVector& GetPlayerStartLocation() const;
 
 public:
 	UPROPERTY(EditDefaultsOnly)
@@ -76,5 +79,11 @@ private:
 
 	FCell* _startCell = nullptr;
 	FCell* _endCell = nullptr;
+
+	UPROPERTY()
+	TArray<ALevelGridCell*> SpawnedCells;
+
+	UPROPERTY()
+	FVector _playerStartLocation = FVector::ZeroVector;
 };
 /*----------------------------------------------------------------------------------------------------*/

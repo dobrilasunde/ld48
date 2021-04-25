@@ -26,6 +26,13 @@ void ALevelPrototype::BeginPlay()
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ALevelPrototype::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	_levelGridGenerator->Destroy();
+}
+/*----------------------------------------------------------------------------------------------------*/
 void ALevelPrototype::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
@@ -34,6 +41,11 @@ void ALevelPrototype::Tick(float deltaTime)
 /*----------------------------------------------------------------------------------------------------*/
 const FVector& ALevelPrototype::GetPlayerStartLocation() const
 {
-	return _playerStartLocation;
+	if (_levelGridGenerator == nullptr)
+	{
+		return _defaultPlayerStartLocation;
+	}
+
+	return _levelGridGenerator->GetPlayerStartLocation();
 }
 /*----------------------------------------------------------------------------------------------------*/

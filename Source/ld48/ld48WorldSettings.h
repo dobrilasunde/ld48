@@ -20,13 +20,9 @@ public:
 	Ald48WorldSettings();
 
 	ALevelManager* GetLevelManager() const;
-	ALevelGridGenerator* GetLevelGridGenerator() const;
 
 private:
 	UPROPERTY(EditAnywhere)
 	ALevelManager* _levelManager;
-
-	UPROPERTY(EditAnywhere)
-	ALevelGridGenerator* _levelGridGenerator;
 };
 /*----------------------------------------------------------------------------------------------------*/
