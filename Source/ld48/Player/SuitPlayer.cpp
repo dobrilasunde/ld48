@@ -1,10 +1,25 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 /*----------------------------------------------------------------------------------------------------*/
 #include "SuitPlayer.h"
-#include "PaperFlipbookComponent.h"
-#include <Kismet/GameplayStatics.h>
-#include <Camera/PlayerCameraManager.h>
 #include "../Camera/PixelCamera.h"
+#include <Camera/PlayerCameraManager.h>
+#include <Components/BoxComponent.h>
+#include <Kismet/GameplayStatics.h>
+#include "PaperFlipbookComponent.h"
+/*----------------------------------------------------------------------------------------------------*/
+ASuitPlayer::ASuitPlayer()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	_meleeAttackFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("MeleeAttackFlipbook"));
+	_meleeAttackFlipbookComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	_meleeAttackFlipbookComponent->Stop();
+	_meleeAttackFlipbookComponent->SetLooping(false);
+	_meleeAttackFlipbookComponent->SetHiddenInGame(true);
+
+	_meleeAttackHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("MeleeHitBox"));
+	_meleeAttackHitBox->SetupAttachment(_meleeAttackFlipbookComponent);
+}
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection)
 {
@@ -96,12 +111,32 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 	}
 	else if (playerState == EMovablePawnState::Attacking)
 	{
+		if (playerDirection == EMovablePawnDirection::Left)
+		{
+			_meleeAttackFlipbookComponent->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+		}
+		else if (playerDirection == EMovablePawnDirection::Right)
+		{
+			_meleeAttackFlipbookComponent->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+		}
+
+		flipbook->SetHiddenInGame(true);
+		_meleeAttackFlipbookComponent->SetHiddenInGame(false);
+		_meleeAttackFlipbookComponent->PlayFromStart();
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
-void ASuitPlayer::Attack()
+void ASuitPlayer::MeleeAttack()
 {
+	if (_meleeAttackFlipbookComponent)
+	{
+		_meleeAttackFlipbookComponent->SetHiddenInGame(true);
+	}
 
+	if (UPaperFlipbookComponent* flipbook = GetSprite())
+	{
+		flipbook->SetHiddenInGame(false);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::StartWalk()
@@ -112,6 +147,11 @@ void ASuitPlayer::StartWalk()
 void ASuitPlayer::StopWalk()
 {
 
+}
+/*----------------------------------------------------------------------------------------------------*/
+UPaperFlipbookComponent* ASuitPlayer::GetMeleeAttackFlipbookComponent() const
+{
+	return _meleeAttackFlipbookComponent;
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
@@ -150,5 +190,17 @@ void ASuitPlayer::PossessedBy(AController* newController)
 			cam->SetTargetActor(this);
 		}
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	const float unitsPerPixel = 1.f / _pixelsPerUnit;
+
+	FVector location = GetActorLocation();
+	location.X = FMath::GridSnap(location.X, unitsPerPixel);
+	location.Z = FMath::GridSnap(location.Z, unitsPerPixel);
+	SetActorLocation(location);
 }
 /*----------------------------------------------------------------------------------------------------*/

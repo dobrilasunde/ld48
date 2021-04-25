@@ -6,6 +6,7 @@
 #include "../Misc/MovablePawnsShared.h"
 #include "SuitPlayer.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
+class UBoxComponent;
 class UPaperFlipbook;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
@@ -14,16 +15,23 @@ class LD48_API ASuitPlayer : public APaperCharacter
 	GENERATED_BODY()
 
 public:
+	ASuitPlayer();
+
 	void SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection);
 
-	void Attack();
+	void MeleeAttack();
 	void StartWalk();
 	void StopWalk();
+
+	UPaperFlipbookComponent* GetMeleeAttackFlipbookComponent() const;
 
 // ACharacter
 public:
 	virtual void BeginPlay() override;
 	virtual void PossessedBy(AController* newController) override;
+
+protected:
+	virtual void Tick(float DeltaTime) override;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
@@ -52,5 +60,15 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
 	UPaperFlipbook* _deathFlipbook;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPaperFlipbookComponent* _meleeAttackFlipbookComponent;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* _meleeAttackHitBox;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Suit")
+	float _pixelsPerUnit = 1.f;
 };
 /*----------------------------------------------------------------------------------------------------*/

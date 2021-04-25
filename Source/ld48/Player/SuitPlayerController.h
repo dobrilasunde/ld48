@@ -58,6 +58,11 @@ private:
 
 	void Reset();
 
+	void AttackScan();
+
+	UFUNCTION()
+	void OnMeleeAttackAnimationFinishedPlaying();
+	
 private:
 	UPROPERTY()
 	APawn* _owningPlayer;
@@ -82,5 +87,11 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Player")
 	EMovablePawnState _playerState;
+
+private:
+	UPROPERTY(EditAnywhere)
+	float _attackDelay = 0.25f;
+
+	float _attackDelayTimer = 0.0f;
 };
 /*----------------------------------------------------------------------------------------------------*/

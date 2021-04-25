@@ -4,6 +4,7 @@
 #include "SuitPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include <algorithm>
+#include <PaperFlipbookComponent.h>
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayerController::SetupInputComponent()
 {
@@ -52,6 +53,8 @@ void ASuitPlayerController::Tick(float deltaSeconds)
 	}
 
 	MovePlayer();
+
+	_attackDelayTimer += deltaSeconds;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayerController::OnPossess(APawn* possesedPawn)
@@ -63,6 +66,14 @@ void ASuitPlayerController::OnPossess(APawn* possesedPawn)
 		_owningPlayer = possesedPawn;
 
 		_movementComponent = Cast<UCharacterMovementComponent>(_owningPlayer->GetMovementComponent());
+
+		if (ASuitPlayer* player = Cast<ASuitPlayer>(_owningPlayer))
+		{
+			if (UPaperFlipbookComponent* meleeAttackFlipbook = player->GetMeleeAttackFlipbookComponent())
+			{
+				meleeAttackFlipbook->OnFinishedPlaying.AddDynamic(this, &ASuitPlayerController::OnMeleeAttackAnimationFinishedPlaying);
+			}
+		}
 
 		Reset();
 
@@ -226,7 +237,21 @@ void ASuitPlayerController::InputComponent_OnRightReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayerController::InputComponent_OnAttackPressed()
 {
+	if (_playerState == EMovablePawnState::Attacking)
+	{
+		return;
+	}
 
+	if (_attackDelayTimer < _attackDelay)
+	{
+		return;
+	}
+
+	//ResetMovement();
+	SetPlayerState(EMovablePawnState::Attacking);
+	AttackScan();
+
+	_attackDelayTimer = 0.0f;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayerController::AddVerticalMovementInput(const EMovementInput& input)
@@ -306,6 +331,24 @@ void ASuitPlayerController::Reset()
 {
 	_playerDirection = EMovablePawnDirection::Left;
 	_owningPlayer->SetActorRotation(FRotator::ZeroRotator);
+	SetPlayerState(EMovablePawnState::Idle);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayerController::AttackScan()
+{
+
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayerController::OnMeleeAttackAnimationFinishedPlaying()
+{
+	ASuitPlayer* player = Cast<ASuitPlayer>(_owningPlayer);
+	if (player == nullptr)
+	{
+		return;
+	}
+
+	player->MeleeAttack();
+
 	SetPlayerState(EMovablePawnState::Idle);
 }
 /*----------------------------------------------------------------------------------------------------*/
