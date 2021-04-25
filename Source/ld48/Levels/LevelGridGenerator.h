@@ -6,6 +6,7 @@
 #include "LevelShared.h"
 #include <vector>
 #include "LevelGridCell.h"
+#include <string>
 #include "LevelGridGenerator.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 struct FCell
@@ -67,6 +68,7 @@ private:
 
 	EWall ChooseRandomWall();
 
+	ELevelGridCellOpened DetermineOpenedSide(FCell* Cell);
 
 	TSubclassOf<ALevelGridCell> GetRandomCellClass() const;
 	void SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz);

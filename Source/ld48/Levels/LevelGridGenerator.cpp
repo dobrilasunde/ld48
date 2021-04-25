@@ -208,10 +208,17 @@ bool ALevelGridGenerator::FindPath(FCell* start, FCell* goal)
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridGenerator::UpdatePathTiles(FCell* start)
 {
+	ELevelGridCellOpened OpenedSide = DetermineOpenedSide(start);
+	start->LevelGridCellOpening = OpenedSide;
+
 	FCell* t = start->Parent;
 	while (t != GetEndCell())
 	{
 		t->TileState = ETileState::Path;
+		
+		OpenedSide = DetermineOpenedSide(start);
+		t->LevelGridCellOpening = OpenedSide;
+
 		t = t->Parent;
 	}
 }
@@ -260,6 +267,37 @@ EWall ALevelGridGenerator::ChooseRandomWall()
 	RandomWall = EWall(FMath::RandRange(0, (uint8)EWall::Count - 1));
 	
 	return RandomWall;
+}
+/*----------------------------------------------------------------------------------------------------*/
+ELevelGridCellOpened ALevelGridGenerator::DetermineOpenedSide(FCell* Cell)
+{
+	if (Cell == nullptr)
+	{
+		return ELevelGridCellOpened::None;
+	}
+	if (Cell->Parent == nullptr)
+	{
+		return ELevelGridCellOpened::None;
+	}
+
+	if (Cell->y == Cell->Parent->y && Cell->x > Cell->Parent->x)
+	{
+		return ELevelGridCellOpened::Top;
+	}
+	else if (Cell->y == Cell->Parent->y && Cell->x < Cell->Parent->x)
+	{
+		return ELevelGridCellOpened::Bottom;
+	}
+	else if (Cell->x == Cell->Parent->x && Cell->y > Cell->Parent->y)
+	{
+		return ELevelGridCellOpened::Left;
+	}
+	else if (Cell->x == Cell->Parent->x && Cell->y < Cell->Parent->y)
+	{
+		return ELevelGridCellOpened::Right;
+	}
+
+	return ELevelGridCellOpened::None;
 }
 /*----------------------------------------------------------------------------------------------------*/
 TSubclassOf<ALevelGridCell> ALevelGridGenerator::GetRandomCellClass() const
