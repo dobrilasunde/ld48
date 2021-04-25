@@ -109,6 +109,7 @@ void ALevelGridGenerator::Initialize()
 	}
 
 	UpdatePathTiles(GetStartCell());
+	DetermineOpenedCellSides();
 }
 /*----------------------------------------------------------------------------------------------------*/
 FCell* ALevelGridGenerator::GetStartCell() const
@@ -198,13 +199,10 @@ bool ALevelGridGenerator::FindPath(FCell* start, FCell* goal)
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridGenerator::UpdatePathTiles(FCell* start)
 {
-	 DetermineOpenedSides(start);
-
 	FCell* t = start->Parent;
 	while (t != GetEndCell())
 	{
 		t->TileState = ETileState::Path;	
-		DetermineOpenedSides(start);
 		t = t->Parent;
 	}
 }
@@ -255,41 +253,47 @@ EWall ALevelGridGenerator::ChooseRandomWall()
 	return RandomWall;
 }
 /*----------------------------------------------------------------------------------------------------*/
-void ALevelGridGenerator::DetermineOpenedSides(FCell* Cell)
+void ALevelGridGenerator::DetermineOpenedCellSides()
 {
+	FCell* Cell = GetStartCell();
 	if (Cell == nullptr)
 	{
 		return;
 	}
-	
-	int32 i = Cell->y;
-	int32 j = Cell->x;
 
-	if (i < 0 || j < 0 || i >= RowNum || j >= ColNum)
+	while (Cell != GetEndCell())
 	{
-		return;
-	}
+		int32 i = Cell->y;
+		int32 j = Cell->x;
 
-	FCell* topCell = (i-1 >= 0)  ? &_grid[i-1][j] : nullptr;
-	FCell* bottomCell = (i + 1 < RowNum) ? &_grid[i + 1][j] : nullptr;
-	FCell* leftCell = (j - 1 >= 0) ? &_grid[i][j - 1] : nullptr;
-	FCell* rightCell = (j + 1 < ColNum) ? &_grid[i][j + 1] : nullptr;
+		if (i < 0 || j < 0 || i >= RowNum || j >= ColNum)
+		{
+			return;
+		}
 
-	{
-	if (topCell && (topCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
-		Cell->IsTopOpen = true;
-	}
-	if (bottomCell && (bottomCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
-	{
-		Cell->IsBottomOpen = true;
-	}
-	if (leftCell && (leftCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
-	{
-		Cell->IsLeftOpen = true;
-	}
-	if (rightCell && (rightCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
-	{
-		Cell->IsRightOpen = true;
+		FCell* topCell = (i - 1 >= 0) ? &_grid[i - 1][j] : nullptr;
+		FCell* bottomCell = (i + 1 < RowNum) ? &_grid[i + 1][j] : nullptr;
+		FCell* leftCell = (j - 1 >= 0) ? &_grid[i][j - 1] : nullptr;
+		FCell* rightCell = (j + 1 < ColNum) ? &_grid[i][j + 1] : nullptr;
+
+		if (topCell && (topCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
+		{
+			Cell->IsTopOpen = true;
+		}
+		if (bottomCell && (bottomCell->TileState == ETileState::Path || bottomCell->TileState == ETileState::Start || bottomCell->TileState == ETileState::End))
+		{
+			Cell->IsBottomOpen = true;
+		}
+		if (leftCell && (leftCell->TileState == ETileState::Path || leftCell->TileState == ETileState::Start || leftCell->TileState == ETileState::End))
+		{
+			Cell->IsLeftOpen = true;
+		}
+		if (rightCell && (rightCell->TileState == ETileState::Path || rightCell->TileState == ETileState::Start || rightCell->TileState == ETileState::End))
+		{
+			Cell->IsRightOpen = true;
+		}
+		
+		Cell = Cell->Parent;
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

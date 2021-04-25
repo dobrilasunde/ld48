@@ -66,7 +66,7 @@ private:
 
 	EWall ChooseRandomWall();
 
-	void DetermineOpenedSides(FCell* Cell);
+	void DetermineOpenedCellSides();
 
 	TSubclassOf<ALevelGridCell> GetRandomCellClass() const;
 	ALevelGridCell* SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz);
