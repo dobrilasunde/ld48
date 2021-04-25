@@ -29,6 +29,10 @@ void ALevelGridGenerator::BeginPlay()
 				FVector cellLocation = rootLocation + FVector(CellBaseSize.X * x, 0.f, CellBaseSize.Z * y);
 				if (ALevelGridCell* cellActor = SpawnCell(cellLocation, GetRandomCellClass()))
 				{
+					cellActor->SetLeftEdgeType(cell.IsLeftOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
+					cellActor->SetRighttEdgeType(cell.IsRightOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
+					cellActor->SetTopEdgeType(cell.IsTopOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
+					cellActor->SetBottomEdgeType(cell.IsBottomOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
 				}
 				row += "x";
 			}
@@ -108,6 +112,7 @@ void ALevelGridGenerator::Initialize()
 		return;
 	}
 
+	UpdatePathTiles(GetStartCell());
 	UpdatePathTiles(GetStartCell());
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -279,15 +284,15 @@ void ALevelGridGenerator::DetermineOpenedSides(FCell* Cell)
 	if (topCell && (topCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
 		Cell->IsTopOpen = true;
 	}
-	if (bottomCell && (bottomCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
+	if (bottomCell && (bottomCell->TileState == ETileState::Path || bottomCell->TileState == ETileState::Start || bottomCell->TileState == ETileState::End))
 	{
 		Cell->IsBottomOpen = true;
 	}
-	if (leftCell && (leftCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
+	if (leftCell && (leftCell->TileState == ETileState::Path || leftCell->TileState == ETileState::Start || leftCell->TileState == ETileState::End))
 	{
 		Cell->IsLeftOpen = true;
 	}
-	if (rightCell && (rightCell->TileState == ETileState::Path || topCell->TileState == ETileState::Start || topCell->TileState == ETileState::End))
+	if (rightCell && (rightCell->TileState == ETileState::Path || rightCell->TileState == ETileState::Start || rightCell->TileState == ETileState::End))
 	{
 		Cell->IsRightOpen = true;
 	}
