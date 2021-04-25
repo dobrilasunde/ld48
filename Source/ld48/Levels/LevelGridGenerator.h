@@ -15,13 +15,13 @@ struct FCell
 	ELevelGridCellOpened LevelGridCellOpening = ELevelGridCellOpened::None;
 
 	std::vector<FCell*> Adjacent;
-	FCell* Parent;
-	float f;
-	float g;
-	float h;
-	bool InOpenSet;
-	bool InClosedSet;
-	bool Blocked;
+	FCell* Parent = nullptr;
+	float f = 0.0f;
+	float g = 0.0f;
+	float h = 0.0f;
+	bool InOpenSet = false;
+	bool InClosedSet = false;
+	bool Blocked = false;
 
 	int32 x = -1;
 	int32 y = -1;
