@@ -21,22 +21,22 @@ class LD48_API ALevelGridCell : public AActor
 
 public:
 	UPROPERTY(EditDefaultsOnly)
-	FString LeftEdgeName_Wall		= "LeftEdgeName_Wall";
+	FString LeftEdgeName_Wall		= "LeftEdge_Wall";
 	UPROPERTY(EditDefaultsOnly)
-	FString RightEdgeName_Wall		= "RightEdgeName_Wall";
+	FString RightEdgeName_Wall		= "RightEdge_Wall";
 	UPROPERTY(EditDefaultsOnly)
-	FString TopEdgeName_Wall		= "TopEdgeName_Wall";
+	FString TopEdgeName_Wall		= "TopEdge_Wall";
 	UPROPERTY(EditDefaultsOnly)
-	FString BottomEdgeName_Wall		= "BottomEdgeName_Wall";
+	FString BottomEdgeName_Wall		= "BottomEdge_Wall";
 
 	UPROPERTY(EditDefaultsOnly)
-	FString LeftEdgeName_Passage	= "LeftEdgeName_Passage";
+	FString LeftEdgeName_Passage	= "LeftEdge_Passage";
 	UPROPERTY(EditDefaultsOnly)
-	FString RightEdgeName_Passage	= "RightEdgeName_Passage";
+	FString RightEdgeName_Passage	= "RightEdge_Passage";
 	UPROPERTY(EditDefaultsOnly)
-	FString TopEdgeName_Passage		= "TopEdgeName_Passage";
+	FString TopEdgeName_Passage		= "TopEdge_Passage";
 	UPROPERTY(EditDefaultsOnly)
-	FString BottomEdgeName_Passage	= "BottomEdgeName_Passage";
+	FString BottomEdgeName_Passage	= "BottomEdge_Passage";
 
 public:
 	virtual void BeginPlay() override;
