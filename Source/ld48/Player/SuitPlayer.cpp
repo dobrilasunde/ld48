@@ -199,6 +199,23 @@ UPaperFlipbookComponent* ASuitPlayer::GetMeleeAttackFlipbookComponent() const
 	return _meleeAttackFlipbookComponent;
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::ApplyDamage(float damage)
+{
+	if (!_canTakeDamage)
+	{
+		return;
+	}
+
+	if (_spriteMatInst != nullptr)
+	{
+		_spriteMatInst->SetScalarParameterValue("BlinkIntensity", 1.f);
+	}
+
+	_canTakeDamage = false;
+
+	GetWorldTimerManager().SetTimer(_invulnerabilityTimer, this, &ASuitPlayer::OnInvulnerabilityTimer, _invulnerabilityOnDamageDuration);
+}
+/*----------------------------------------------------------------------------------------------------*/
 /*override*/
 void ASuitPlayer::BeginPlay()
 {
@@ -206,33 +223,18 @@ void ASuitPlayer::BeginPlay()
 
 	if (APlayerCameraManager* camManager = UGameplayStatics::GetPlayerCameraManager(this, 0))
 	{
-		AActor* a = camManager->GetViewTarget();
-		if (a == nullptr)
-		{
-			;
-		}
-		if (APixelCamera* cam = Cast<APixelCamera>(a))
+		if (APixelCamera* cam = Cast<APixelCamera>(camManager->GetViewTarget()))
 		{
 			cam->SetTargetActor(this);
 		}
 	}
-}
-/*----------------------------------------------------------------------------------------------------*/
-/*override*/
-void ASuitPlayer::PossessedBy(AController* newController)
-{
-	Super::PossessedBy(newController);
 
-	if (APlayerCameraManager* camManager = UGameplayStatics::GetPlayerCameraManager(this, 0))
+	if (UPaperFlipbookComponent* flipbook = GetSprite())
 	{
-		AActor* a = camManager->GetViewTarget();
-		if (a == nullptr)
+		if (_spriteMaterial != nullptr)
 		{
-			;
-		}
-		if (APixelCamera* cam = Cast<APixelCamera>(a))
-		{
-			cam->SetTargetActor(this);
+			_spriteMatInst = UMaterialInstanceDynamic::Create(_spriteMaterial, this);
+			flipbook->SetMaterial(0, _spriteMatInst);
 		}
 	}
 }
@@ -275,6 +277,16 @@ void ASuitPlayer::ShakeCamera()
 	else
 	{
 		PlayerCameraManager->PlayCameraShake(_verticalCameraShake, 1.0f);
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::OnInvulnerabilityTimer()
+{
+	_canTakeDamage = true;
+
+	if (_spriteMatInst != nullptr)
+	{
+		_spriteMatInst->SetScalarParameterValue("BlinkIntensity", 0.f);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

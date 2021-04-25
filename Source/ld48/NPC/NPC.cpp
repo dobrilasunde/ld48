@@ -451,7 +451,7 @@ void ANPC::OnArrivedToTarget(AActor* target)
 	TArray<AActor*> overlappingActors;
 	_attackHitBox->GetOverlappingActors(overlappingActors);
 
-	if (overlappingActors.Find(target) && _npcState == EMovablePawnState::Idle)
+	if (overlappingActors.Contains(target) && _npcState == EMovablePawnState::Idle)
 	{
 		AttackTarget(target);
 	}
@@ -477,10 +477,7 @@ void ANPC::AttackTarget(AActor* target)
 
 	if (ASuitPlayer* targetCharacter = Cast<ASuitPlayer>(target))
 	{
-		if (ASuitPlayerController* targetController = Cast<ASuitPlayerController>(targetCharacter->GetController()))
-		{
-			//targetController->ApplyDamage(_npcDirection, _attackDamage);
-		}
+		targetCharacter->ApplyDamage(0.f);
 	}
 
 	//ResetMovement();
