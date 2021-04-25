@@ -6,30 +6,11 @@
 #include "Components/SceneComponent.h"
 #include "PaperSpriteComponent.h"
 #include "Engine/CollisionProfile.h"
+#include "LevelGridGenerator.h"
 /*----------------------------------------------------------------------------------------------------*/
 ALevelPrototype::ALevelPrototype()
 {
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-
-	_background = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Background"));
-	_background->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
-	_background->SetupAttachment(RootComponent);
-
-	_foreground = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Foreground"));
-	_foreground->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
-	_foreground->SetupAttachment(RootComponent);
-
-	_boxLeft = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Left"));
-	_boxLeft->SetupAttachment(RootComponent);
-
-	_boxRight = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Right"));
-	_boxRight->SetupAttachment(RootComponent);
-
-	_boxTop = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Top"));
-	_boxTop->SetupAttachment(RootComponent);
-
-	_boxBottom = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Bottom"));
-	_boxBottom->SetupAttachment(RootComponent);
 
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
@@ -39,7 +20,10 @@ void ALevelPrototype::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_timeCounter = 0.f;
+	if (_levelGridGeneratorClass)
+	{
+		_levelGridGenerator = GetWorld()->SpawnActor<ALevelGridGenerator>(_levelGridGeneratorClass);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelPrototype::Tick(float deltaTime)

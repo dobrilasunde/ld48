@@ -11,6 +11,8 @@ ALevelGridGenerator::ALevelGridGenerator()
 /*override*/
 void ALevelGridGenerator::BeginPlay()
 {
+	Super::BeginPlay();
+
 	Initialize();
 
 	FVector rootLocation = GetActorLocation();
@@ -69,6 +71,12 @@ void ALevelGridGenerator::Initialize()
 			newCell.y = i;
 			_grid[i][j] = newCell;
 		}
+	}
+
+	if (RowNum <= 1 && ColNum <= 1)
+	{
+		_grid[0][0].TileState = ETileState::Start;
+		return;
 	}
 
 	GenerateStartEndCell();

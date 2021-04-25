@@ -16,7 +16,7 @@ void ALevelManager::BeginPlay()
 
 	// Init level locked status
 	_levelsLocked.Emplace(ELevelName::LevelOffice, false);
-	_levelsLocked.Emplace(ELevelName::LevelElevator, true);
+	_levelsLocked.Emplace(ELevelName::LevelElevator, false);
 	_levelsLocked.Emplace(ELevelName::LevelGarage, true);
 	_levelsLocked.Emplace(ELevelName::LevelStairs, true);
 
@@ -61,15 +61,15 @@ void ALevelManager::UnlockLevel(const ELevelName& level)
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelManager::ResetLevels()
 {
-// 	for (uint8 i = 0; i < (uint8)ELevelName::Count; ++i)
-// 	{
-// 		LockLevel((ELevelName)i);
-// 	}
-// 
-// 	UnlockLevel(ELevelName::LevelZero);
-// 	UnlockLevel(ELevelName::LevelLimbo);
-// 
-// 	SetCurrentLevel(ELevelName::LevelZero);
+	for (uint8 i = 0; i < (uint8)ELevelName::Count; ++i)
+	{
+		LockLevel((ELevelName)i);
+	}
+
+	UnlockLevel(ELevelName::LevelOffice);
+	UnlockLevel(ELevelName::LevelElevator);
+
+	SetCurrentLevel(ELevelName::LevelOffice);
 }
 /*----------------------------------------------------------------------------------------------------*/
 ALevelPrototype* ALevelManager::LoadLevel(const ELevelName& level)
