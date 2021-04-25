@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "LevelShared.h"
 #include <vector>
+#include "LevelGridCell.h"
 #include "LevelGridGenerator.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 struct FCell
@@ -20,6 +21,15 @@ struct FCell
 	bool InOpenSet;
 	bool InClosedSet;
 	bool Blocked;
+
+	int32 x = -1;
+	int32 y = -1;
+
+public:
+	std::string ToString() const 
+	{
+		return "test";
+	}
 };
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
@@ -30,24 +40,36 @@ class LD48_API ALevelGridGenerator : public AActor
 public:
 	ALevelGridGenerator();
 
+	virtual void BeginPlay() override;
+
+public:
+	UPROPERTY(EditDefaultsOnly)
+	int32 RowNum = 4;
+	UPROPERTY(EditDefaultsOnly)
+	int32 ColNum = 4;
+	UPROPERTY(EditDefaultsOnly)
+	TArray<TSubclassOf<ALevelGridCell>> PossibleCellClasses;
+	UPROPERTY(EditDefaultsOnly)
+	FVector CellBaseSize = FVector::ZeroVector;
+
+private:
+	void Initialize();
+
 	FCell* GetStartCell() const;
 	FCell* GetEndCell() const;
 
-	bool FindPath(FCell* start,FCell* goal);
+	bool FindPath(FCell* start, FCell* goal);
 	void UpdatePathTiles(FCell* start);
 
 	const std::vector<std::vector<FCell>>& GetGrid() const;
 
-public:
-	UPROPERTY(EditAnywhere)
-	int32 RowNum = 4;
-	UPROPERTY(EditAnywhere)
-	int32 ColNum = 4;
-
-private:
 	void GenerateStartEndCell();
 
 	EWall ChooseRandomWall();
+
+
+	TSubclassOf<ALevelGridCell> GetRandomCellClass() const;
+	void SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz);
 
 private:
 	std::vector<std::vector<FCell>> _grid;

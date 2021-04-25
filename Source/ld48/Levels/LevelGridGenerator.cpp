@@ -5,6 +5,46 @@
 /*----------------------------------------------------------------------------------------------------*/
 ALevelGridGenerator::ALevelGridGenerator()
 {
+	
+}
+/*----------------------------------------------------------------------------------------------------*/
+/*override*/
+void ALevelGridGenerator::BeginPlay()
+{
+	Initialize();
+
+	FVector rootLocation = GetActorLocation();
+
+	FString str = ".\n";
+	for (int32 y = 0; y < RowNum; ++y)
+	{
+		FString row;
+		for (int32 x = 0; x < ColNum; ++x)
+		{
+			const FCell& cell = _grid[y][x];
+			if (cell.TileState == ETileState::Path || 
+				cell.TileState == ETileState::Start ||
+				cell.TileState == ETileState::End)
+			{
+				FVector cellLocation = rootLocation + FVector(CellBaseSize.X * x, 0.f, CellBaseSize.Z * y);
+				SpawnCell(cellLocation, GetRandomCellClass());
+				row += "x";
+			}
+			else
+			{
+				row += "o";
+			}
+		}
+
+		str += row;
+		str += "\n";
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("\n%s"), *str);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelGridGenerator::Initialize()
+{
 	_grid.resize(RowNum);
 	for (size_t i = 0; i < _grid.size(); ++i)
 	{
@@ -19,6 +59,8 @@ ALevelGridGenerator::ALevelGridGenerator()
 			FCell newCell;
 			//generating h(x)
 			newCell.h = FMath::RandRange(0, 100);
+			newCell.x = j;
+			newCell.y = i;
 			_grid[i][j] = newCell;
 		}
 	}
@@ -57,7 +99,25 @@ ALevelGridGenerator::ALevelGridGenerator()
 		}
 	}
 
-	FindPath(GetEndCell(), GetStartCell());
+	/*for (int32 y = 0; y < ColNum; ++y)
+	{
+		for (int32 x = 0; x < RowNum; ++x)
+		{
+			UE_LOG(LogTemp, Log, TEXT("CELL x = %d y = %d"), _grid[y][x].x, _grid[y][x].y);
+			for (const FCell* adj : _grid[y][x].Adjacent)
+			{
+				UE_LOG(LogTemp, Log, TEXT("_____CELL x = %d y = %d"), adj->x, adj->y);
+			}
+		}
+	}*/
+
+	bool succ = FindPath(GetEndCell(), GetStartCell());
+	UE_LOG(LogTemp, Log, TEXT("success = %d"), succ);
+	if (!succ)
+	{
+		return;
+	}
+
 	UpdatePathTiles(GetStartCell());
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -73,6 +133,11 @@ FCell* ALevelGridGenerator::GetEndCell() const
 /*----------------------------------------------------------------------------------------------------*/
 bool ALevelGridGenerator::FindPath(FCell* start, FCell* goal)
 {
+	if (start == nullptr || goal == nullptr)
+	{
+		return false;
+	}
+
 	for (int32 i = 0; i < RowNum; ++i)
 	{
 		for (int32 j = 0; j < ColNum; ++j)
@@ -87,6 +152,8 @@ bool ALevelGridGenerator::FindPath(FCell* start, FCell* goal)
 
 	FCell* current = start;
 	current->InClosedSet = true;
+
+	const float DISTANCE_WEIGHT = 0.0f;
 
 	do
 	{
@@ -104,7 +171,7 @@ bool ALevelGridGenerator::FindPath(FCell* start, FCell* goal)
 					neighbour->Parent = current;
 					//g(x) is the parent's g + cost of traversing the edge in the tree (actual path cost)
 					neighbour->g = current->g + 1;
-					neighbour->f = neighbour->h + neighbour->g;
+					neighbour->f = (1.f - DISTANCE_WEIGHT) * neighbour->h + DISTANCE_WEIGHT * neighbour->g;
 					openSet.emplace_back(neighbour);
 					neighbour->InOpenSet = true;
 				}
@@ -117,7 +184,7 @@ bool ALevelGridGenerator::FindPath(FCell* start, FCell* goal)
 						//adopt this node
 						neighbour->Parent = current;
 						neighbour->g = newG;
-						neighbour->f = neighbour->g + neighbour->h;
+						neighbour->f = (1.f - DISTANCE_WEIGHT) * neighbour->h + DISTANCE_WEIGHT * neighbour->g;
 					}
 				}
 			}
@@ -136,7 +203,7 @@ bool ALevelGridGenerator::FindPath(FCell* start, FCell* goal)
 		current->InClosedSet = true;
 	} while (current != goal);
 
-	return (current == goal) ? true : false;
+	return current == goal;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridGenerator::UpdatePathTiles(FCell* start)
@@ -193,5 +260,25 @@ EWall ALevelGridGenerator::ChooseRandomWall()
 	RandomWall = EWall(FMath::RandRange(0, (uint8)EWall::Count - 1));
 	
 	return RandomWall;
+}
+/*----------------------------------------------------------------------------------------------------*/
+TSubclassOf<ALevelGridCell> ALevelGridGenerator::GetRandomCellClass() const
+{
+	if (PossibleCellClasses.Num() == 0)
+	{
+		return nullptr;
+	}
+
+	return PossibleCellClasses[FMath::RandRange(0, PossibleCellClasses.Num() - 1)];
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelGridGenerator::SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz)
+{
+	if (clazz == nullptr)
+	{
+		return;
+	}
+
+	GetWorld()->SpawnActor<ALevelGridCell>(clazz, FTransform(location));
 }
 /*----------------------------------------------------------------------------------------------------*/
