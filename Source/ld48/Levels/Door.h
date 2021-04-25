@@ -31,8 +31,13 @@ private:
 
 	void Activate();
 
+	void ChooseRandomTargetLevel();
+
 private:
 	UPROPERTY(EditDefaultsOnly)
+	TMap<ELevelName, float> _targetLevelsWithSpawnChance;
+
+	UPROPERTY()
 	ELevelName _targetLevel;
 
 	UPROPERTY(EditDefaultsOnly)

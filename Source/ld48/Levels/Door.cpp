@@ -30,6 +30,8 @@ void ADoor::BeginPlay()
 		_boxComponent->OnComponentBeginOverlap.AddDynamic(this, &ADoor::OnOverlapBegin);
 	}
 
+	ChooseRandomTargetLevel();
+
 	if (Ald48WorldSettings* worldSettings = Cast<Ald48WorldSettings>(GetWorldSettings()))
 	{
 		if (ALevelManager* levelManager = worldSettings->GetLevelManager())
@@ -97,5 +99,33 @@ void ADoor::Open()
 void ADoor::Activate()
 {
 	_isActive = true;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ADoor::ChooseRandomTargetLevel()
+{
+	if (_targetLevelsWithSpawnChance.Num() == 0)
+	{
+		return;
+	}
+
+	float chanceSum = 0.0f;
+	for (const TPair<ELevelName, float>& pair : _targetLevelsWithSpawnChance)
+	{
+		chanceSum += pair.Value;
+	}
+
+	float randomNumber = FMath::RandRange(0.0f, chanceSum);
+	for (const TPair<ELevelName, float>& pair : _targetLevelsWithSpawnChance)
+	{
+		if (pair.Value > randomNumber)
+		{
+			_targetLevel = pair.Key;
+			return;
+		}
+		else
+		{
+			randomNumber -= pair.Value;
+		}
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
