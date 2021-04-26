@@ -13,6 +13,7 @@ enum class ELevelName : uint8
 	LevelGarage,
 	LevelElevator,
 	LevelStairs,
+	FinalLevel,
 	Count UMETA(Hidden)
 };
 /*----------------------------------------------------------------------------------------------------*/

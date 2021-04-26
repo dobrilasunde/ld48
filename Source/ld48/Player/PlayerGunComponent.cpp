@@ -9,6 +9,10 @@ void UPlayerGunComponent::Shoot(FVector direction)
 {
 	if (_ammoCount <= 0)
 	{
+		if (ASuitPlayer* owner = Cast<ASuitPlayer>(GetOwner()))
+		{
+			owner->SetHasGun(false);
+		}
 		return;
 	}
 
@@ -30,6 +34,14 @@ int32 UPlayerGunComponent::GetAmmoCount() const
 void UPlayerGunComponent::SetAmmoCount(int32 value)
 {
 	_ammoCount = value;
+
+	if (_ammoCount > 0)
+	{
+		if (ASuitPlayer* owner = Cast<ASuitPlayer>(GetOwner()))
+		{
+			owner->SetHasGun(true);
+		}
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void UPlayerGunComponent::SpawnProjectile(FVector direction)
