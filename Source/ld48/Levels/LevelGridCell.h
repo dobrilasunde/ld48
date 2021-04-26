@@ -48,17 +48,14 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	FString BottomEdgeName_Passage	= "BottomEdge_Passage";
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ADoor* _doorLeft;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ADoor* _doorRight;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ADoor* _doorTop;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ADoor* _doorBottom;
-
-	UFUNCTION(BlueprintCallable)
-	void SetDoor(ADoor* door);
 
 public:
 	ALevelGridCell();

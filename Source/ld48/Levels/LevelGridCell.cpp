@@ -6,11 +6,6 @@
 #include <Engine/TargetPoint.h>
 #include <Components/ChildActorComponent.h>
 /*----------------------------------------------------------------------------------------------------*/
-void ALevelGridCell::SetDoor(ADoor* door)
-{
-	UE_LOG(LogTemp, Log, TEXT(""));
-}
-/*----------------------------------------------------------------------------------------------------*/
 ALevelGridCell::ALevelGridCell()
 {
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
