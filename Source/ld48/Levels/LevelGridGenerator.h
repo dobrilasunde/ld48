@@ -44,6 +44,8 @@ public:
 
 	const FVector& GetPlayerStartLocation() const;
 
+	TArray<FVector> GetSpawnLocations();
+	
 public:
 	UPROPERTY(EditDefaultsOnly)
 	int32 RowNum = 4;

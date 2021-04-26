@@ -7,6 +7,7 @@
 #include "PaperSpriteComponent.h"
 #include "Engine/CollisionProfile.h"
 #include "LevelGridGenerator.h"
+#include "../NPC/NPC.h"
 /*----------------------------------------------------------------------------------------------------*/
 ALevelPrototype::ALevelPrototype()
 {
@@ -47,5 +48,49 @@ const FVector& ALevelPrototype::GetPlayerStartLocation() const
 	}
 
 	return _levelGridGenerator->GetPlayerStartLocation();
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelPrototype::SpawnEnemies(int32 amount)
+{
+	if (_levelGridGenerator == nullptr)
+	{
+		return;
+	}
+
+	if (_enemyClass == nullptr)
+	{
+		return;
+	}
+
+	TArray<FVector> spawnLocations = _levelGridGenerator->GetSpawnLocations();
+	if (spawnLocations.Num() == 0)
+	{
+		return;
+	}
+
+	ShuffleSpawners(spawnLocations);
+
+	for (int32 i = 0; i < amount; ++i)
+	{
+		GetWorld()->SpawnActor<ANPC>(_enemyClass, spawnLocations[i], FRotator::ZeroRotator);
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelPrototype::ShuffleSpawners(TArray<FVector>& Array)
+{
+	if (Array.Num() == 0)
+	{
+		return;
+	}
+
+	int32 LastIndex = Array.Num() - 1;
+	for (int32 i = 0; i <= LastIndex; ++i)
+	{
+		int32 j = FMath::RandRange(i, LastIndex);
+		if (i != j)
+		{
+			Array.Swap(i, j);
+		}
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/

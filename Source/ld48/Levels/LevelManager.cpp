@@ -28,6 +28,7 @@ void ALevelManager::SetCurrentLevel(const ELevelName& level)
 	UnloadCurrentLevel();
 	_currentLevelInstance = LoadLevel(level);
 	_currentLevel = level;
+	_currentLevelInstance->SpawnEnemies(GetCurrentLevelEnemySpawnAmount());
 
 	if (_currentLevelInstance != nullptr)
 	{
@@ -116,5 +117,10 @@ APawn* ALevelManager::FindPlayerPawn() const
 	}
 
 	return pc->GetPawn();
+}
+/*----------------------------------------------------------------------------------------------------*/
+int32 ALevelManager::GetCurrentLevelEnemySpawnAmount() const
+{
+	return _maxEnemySpawnAmount[_currentLevelDifficulty];
 }
 /*----------------------------------------------------------------------------------------------------*/

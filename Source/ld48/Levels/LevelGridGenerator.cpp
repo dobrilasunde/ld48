@@ -73,6 +73,28 @@ const FVector& ALevelGridGenerator::GetPlayerStartLocation() const
 	return _playerStartLocation;
 }
 /*----------------------------------------------------------------------------------------------------*/
+TArray<FVector> ALevelGridGenerator::GetSpawnLocations()
+{
+	TArray<FVector> spawnLocations;
+
+	if (SpawnedCells.Num() == 0)
+	{
+		return spawnLocations;
+	}
+
+	for (ALevelGridCell* cell : SpawnedCells)
+	{
+		if (cell == nullptr)
+		{
+			continue;
+		}
+
+		spawnLocations.Append(cell->GetSpawnLocations());
+	}
+
+	return spawnLocations;
+}
+/*----------------------------------------------------------------------------------------------------*/
 void ALevelGridGenerator::Initialize()
 {
 	_grid.resize(RowNum);

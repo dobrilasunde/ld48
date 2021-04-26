@@ -42,6 +42,7 @@ public:
 public:
 	ALevelGridCell();
 
+	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
 
 	void SetLeftEdgeType(ECellEdgeType type);
@@ -51,6 +52,7 @@ public:
 
 	const FTransform& GetPlayerStart() const;
 
+	const TArray<FVector>& GetSpawnLocations() const;
 private:
 	UPaperSpriteComponent* _leftEdgeComp_Wall;
 	UPaperSpriteComponent* _rightEdgeComp_Wall;
@@ -64,6 +66,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USceneComponent* _playerStartPosition;
+
+	TArray<FVector> _spawnLocations;
 
 private:
 	void CollectComponents();

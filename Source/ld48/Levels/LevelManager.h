@@ -31,12 +31,20 @@ private:
 
 	APawn* FindPlayerPawn() const;
 
+	int32 GetCurrentLevelEnemySpawnAmount() const;
+
 private:
 	UPROPERTY(EditDefaultsOnly)
 	ELevelName _initialLevel;
 
 	UPROPERTY(EditDefaultsOnly)
+	ELevelDifficulty _currentLevelDifficulty = ELevelDifficulty::Easy;
+
+	UPROPERTY(EditDefaultsOnly)
 	TMap<ELevelName, TSubclassOf<ALevelPrototype>> _levels;
+
+	UPROPERTY(EditDefaultsOnly)
+	TMap<ELevelDifficulty, int32> _maxEnemySpawnAmount;
 
 private:
 	UPROPERTY()

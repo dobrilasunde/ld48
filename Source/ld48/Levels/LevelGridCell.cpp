@@ -3,6 +3,8 @@
 #include "LevelGridCell.h"
 #include <PaperSpriteComponent.h>
 #include <Components/SceneComponent.h>
+#include <Engine/TargetPoint.h>
+#include <Components/ChildActorComponent.h>
 /*----------------------------------------------------------------------------------------------------*/
 ALevelGridCell::ALevelGridCell()
 {
@@ -12,11 +14,17 @@ ALevelGridCell::ALevelGridCell()
 	_playerStartPosition->SetupAttachment(RootComponent);
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ALevelGridCell::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	
+	CollectComponents();
+}
+/*----------------------------------------------------------------------------------------------------*/
 void ALevelGridCell::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CollectComponents();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridCell::SetLeftEdgeType(ECellEdgeType type)
@@ -108,6 +116,11 @@ const FTransform& ALevelGridCell::GetPlayerStart() const
 	return _playerStartPosition->GetComponentToWorld();
 }
 /*----------------------------------------------------------------------------------------------------*/
+const TArray<FVector>& ALevelGridCell::GetSpawnLocations() const
+{
+	return _spawnLocations;
+}
+/*----------------------------------------------------------------------------------------------------*/
 void ALevelGridCell::CollectComponents()
 {
 	TArray<UPaperSpriteComponent*> components;
@@ -131,6 +144,22 @@ void ALevelGridCell::CollectComponents()
 		else if (compName == RightEdgeName_Passage) _rightEdgeComp_Passage = spriteComp;
 		else if (compName == TopEdgeName_Passage) _topEdgeComp_Passage = spriteComp;
 		else if (compName == BottomEdgeName_Passage) _bottomEdgeComp_Passage = spriteComp;
+	}
+
+	TArray<UChildActorComponent*> childActors;
+	GetComponents<UChildActorComponent>(childActors);
+
+	for (UChildActorComponent* childActor : childActors)
+	{
+		if (childActor == nullptr)
+		{
+			continue;
+		}
+
+		if (childActor->GetChildActorClass().Get()->IsChildOf(ATargetPoint::StaticClass()))
+		{
+			_spawnLocations.Add(childActor->GetComponentTransform().GetLocation());
+		}
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
