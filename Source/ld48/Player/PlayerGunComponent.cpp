@@ -22,9 +22,17 @@ void UPlayerGunComponent::SpawnProjectile(FVector direction)
 		return;
 	}
 
-	if (AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass))
-	{
-		projectile->Launch(GetComponentLocation() + direction * _projectileSpawnOffset, direction * _projectileSpeed);
-	}
+	FVector newLocation = GetComponentLocation() + direction * _projectileSpawnOffset;
+	FVector newDirection = direction * _projectileSpeed;
+	FMatrix rotationMatrix = FRotationMatrix::MakeFromXY(newDirection, FVector::RightVector);
+
+	FActorSpawnParameters spawnParameters;
+	spawnParameters.Owner = GetOwner();
+	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, newLocation, rotationMatrix.Rotator(), spawnParameters);
+
+// 	if (AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass))
+// 	{
+// 		projectile->Launch(GetComponentLocation() + direction * _projectileSpawnOffset, direction * _projectileSpeed);
+// 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
