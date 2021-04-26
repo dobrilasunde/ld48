@@ -384,7 +384,7 @@ void ASuitPlayer::OnHealthChanged()
 
 	if (_health <= 0.0f)
 	{
-
+		UGameplayStatics::OpenLevel(GetWorld(), FName("StartGame"));
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
