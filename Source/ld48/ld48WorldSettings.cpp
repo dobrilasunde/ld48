@@ -12,3 +12,8 @@ ALevelManager* Ald48WorldSettings::GetLevelManager() const
 	return _levelManager;
 }
 /*----------------------------------------------------------------------------------------------------*/
+AAudioManager* Ald48WorldSettings::GetAudioManager() const
+{
+	return _audioManager;
+}
+/*----------------------------------------------------------------------------------------------------*/

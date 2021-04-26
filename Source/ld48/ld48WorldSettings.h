@@ -7,6 +7,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 class ALevelGridGenerator;
 class ALevelManager;
+class AAudioManager;
 /*----------------------------------------------------------------------------------------------------*/
 /**
  * 
@@ -20,9 +21,13 @@ public:
 	Ald48WorldSettings();
 
 	ALevelManager* GetLevelManager() const;
+	AAudioManager* GetAudioManager() const;
 
 private:
 	UPROPERTY(EditAnywhere)
 	ALevelManager* _levelManager;
+
+	UPROPERTY(EditAnywhere)
+	AAudioManager* _audioManager;
 };
 /*----------------------------------------------------------------------------------------------------*/
