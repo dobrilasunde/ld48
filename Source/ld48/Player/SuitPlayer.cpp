@@ -219,10 +219,10 @@ void ASuitPlayer::ApplyDamage(EMovablePawnDirection direction, float damage)
 		return;
 	}
 
-	if(GetOppositeDirection(direction) == PlayerController->GetPlayerDirection())
+	/*if(GetOppositeDirection(direction) == PlayerController->GetPlayerDirection())
 	{
 		return;
-	}
+	}*/
 
 	SetHealth(_health - damage);
 
@@ -247,7 +247,7 @@ float ASuitPlayer::GetHealth() const
 	return _health;
 }
 /*----------------------------------------------------------------------------------------------------*/
-void ASuitPlayer::UpdateHealthProgressBar()
+void ASuitPlayer::UpdateUI()
 {
 	ASuitPlayerController* playerController = Cast<ASuitPlayerController>(GetController());
 	if (playerController == nullptr)
@@ -255,13 +255,16 @@ void ASuitPlayer::UpdateHealthProgressBar()
 		return;
 	}
 
-	Aldjam48HUD* hud = Cast<Aldjam48HUD>(playerController->GetHUD());
-	if (hud != nullptr)
+	if (Aldjam48HUD* hud = Cast<Aldjam48HUD>(playerController->GetHUD()))
 	{
-		UHudWidget* hudWidget = hud->GetHudWidget();
-		if (hudWidget != nullptr)
+		if (UHudWidget* hudWidget = hud->GetHudWidget())
 		{
 			hudWidget->SetHealthProgressBar(_health);
+
+			if (_gunComponent != nullptr)
+			{
+				hudWidget->SetAmmoCount(_gunComponent->GetAmmoCount());
+			}
 		}
 	}
 }
@@ -272,8 +275,8 @@ void ASuitPlayer::SetInvincible(bool value)
 
 	if (_spriteMatInst != nullptr)
 	{
-		int32 blinkIntensity = value ? 1 : 0;
-		_spriteMatInst->SetScalarParameterValue("BlinkIntensity", 1.f);
+		float blinkIntensity = value ? 1.f : 0.f;
+		_spriteMatInst->SetScalarParameterValue("BlinkIntensity", blinkIntensity);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -298,6 +301,8 @@ void ASuitPlayer::BeginPlay()
 			flipbook->SetMaterial(0, _spriteMatInst);
 		}
 	}
+
+	UpdateUI();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::Tick(float DeltaTime)
@@ -348,7 +353,7 @@ void ASuitPlayer::OnInvulnerabilityTimer()
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::OnHealthChanged()
 {
-	UpdateHealthProgressBar();
+	UpdateUI();
 
 	if (_health <= 0.0f)
 	{

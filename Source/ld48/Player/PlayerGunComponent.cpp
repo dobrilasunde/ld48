@@ -15,6 +15,16 @@ void UPlayerGunComponent::Shoot(FVector direction)
 	SpawnProjectile(direction);
 
 	_ammoCount--;
+
+	if (ASuitPlayer* owner = Cast<ASuitPlayer>(GetOwner()))
+	{
+		owner->UpdateUI();
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+int32 UPlayerGunComponent::GetAmmoCount() const
+{
+	return _ammoCount;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void UPlayerGunComponent::SpawnProjectile(FVector direction)

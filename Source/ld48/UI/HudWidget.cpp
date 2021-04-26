@@ -8,7 +8,7 @@
 UHudWidget::UHudWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 }
-//--------------------------------------------------------------------------------------------------
+/*----------------------------------------------------------------------------------------------------*/
 void UHudWidget::SetHealthProgressBar(float value)
 {
 	if (_healthProgressBar != nullptr)
@@ -16,4 +16,14 @@ void UHudWidget::SetHealthProgressBar(float value)
 		_healthProgressBar->SetPercent(value);
 	}
 }
+/*----------------------------------------------------------------------------------------------------*/
+void UHudWidget::SetAmmoCount(int32 count)
+{
+	if (_ammoText != nullptr)
+	{
+		_ammoText->SetText(FText::FromString(FString::Printf(TEXT("ammo: %d"), count)));
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+
 /*----------------------------------------------------------------------------------------------------*/
