@@ -21,11 +21,6 @@ void AZombieNPC::Tick(float DeltaTime)
 void AZombieNPC::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (GetCapsuleComponent())
-	{
-		GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AZombieNPC::OnOverlapBegin);
-	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AZombieNPC::MoveToTarget(AActor* target)
@@ -55,13 +50,5 @@ void AZombieNPC::OnArrivedToTarget(AActor* target)
 void AZombieNPC::AttackTarget(AActor* target)
 {
 	Super::AttackTarget(target);
-}
-/*----------------------------------------------------------------------------------------------------*/
-void AZombieNPC::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
-{
-	if (AProjectile* projectile = Cast<AProjectile>(otherActor))
-	{
-		Destroy();
-	}
 }
 /*----------------------------------------------------------------------------------------------------*/

@@ -20,9 +20,5 @@ public:
 	virtual void MoveToTarget(AActor* target) override;
 	virtual void OnArrivedToTarget(AActor* target) override;
 	virtual void AttackTarget(AActor* target) override;
-
-private:
-	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
 };
 /*----------------------------------------------------------------------------------------------------*/
