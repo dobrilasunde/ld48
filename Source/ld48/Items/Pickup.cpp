@@ -31,11 +31,19 @@ void APickup::BeginPlay()
 	{
 		_sphereComponent->OnComponentBeginOverlap.AddDynamic(this, &APickup::OnOverlapBegin);
 	}
+
+	GetWorldTimerManager().SetTimer(_disabledTimer, this, &APickup::OnDisabledTimer, _disabledDuration);
+
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
 void APickup::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
 {
+	if (_disabled)
+	{
+		return;
+	}
+
 	if (otherActor == nullptr && otherActor == this && otherComp == nullptr)
 	{
 		return;
@@ -54,5 +62,10 @@ void APickup::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherA
 		player->AddAmmo(_ammo);
 		Destroy();
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void APickup::OnDisabledTimer()
+{
+	_disabled = false;
 }
 /*----------------------------------------------------------------------------------------------------*/

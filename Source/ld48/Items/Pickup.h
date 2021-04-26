@@ -24,6 +24,9 @@ private:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
 
+	UFUNCTION()
+	void OnDisabledTimer();
+
 private:
 	UPROPERTY(EditAnywhere)
 	UPaperSpriteComponent* _spriteComponent;
@@ -33,5 +36,12 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	int32 _ammo = 10;
+
+	FTimerHandle _disabledTimer;
+
+	UPROPERTY(EditAnywhere)
+	float _disabledDuration = 2.f;
+
+	bool _disabled = true;
 };
 /*----------------------------------------------------------------------------------------------------*/
