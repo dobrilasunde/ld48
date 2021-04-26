@@ -2,6 +2,8 @@
 /*----------------------------------------------------------------------------------------------------*/
 #include "PlayerGunComponent.h"
 #include "Projectile.h"
+#include "SuitPlayer.h"
+#include "SuitPlayerController.h"
 /*----------------------------------------------------------------------------------------------------*/
 void UPlayerGunComponent::Shoot(FVector direction)
 {
@@ -30,9 +32,12 @@ void UPlayerGunComponent::SpawnProjectile(FVector direction)
 	spawnParameters.Owner = GetOwner();
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, newLocation, rotationMatrix.Rotator(), spawnParameters);
 
-// 	if (AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass))
+// 	if (ASuitPlayer* Player = Cast<ASuitPlayer>(GetOwner()))
 // 	{
-// 		projectile->Launch(GetComponentLocation() + direction * _projectileSpawnOffset, direction * _projectileSpeed);
+// 		if (ASuitPlayerController* PlayerController = Cast<ASuitPlayerController>(Player->GetController()))
+// 		{
+// 			projectile->SetDirection(PlayerController->GetPlayerDirection());
+// 		}
 // 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

@@ -2,6 +2,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 #pragma once
 
+#include "../Misc/MovablePawnsShared.h"
 #include "Projectile.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class UPaperFlipbookComponent;
@@ -19,6 +20,7 @@ public:
 	UPaperFlipbookComponent* GetFlipbook() const;
 
 	virtual void Tick(float DeltaTime) override;
+	void SetDirection(EMovablePawnDirection direction);
 
 protected:
 	virtual void BeginPlay() override;
@@ -42,5 +44,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USphereComponent* _sphereComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	EMovablePawnDirection _direction;
 };
 /*----------------------------------------------------------------------------------------------------*/
