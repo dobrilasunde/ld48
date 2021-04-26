@@ -35,6 +35,8 @@ public:
 	void SetHealth(float health);
 	float GetHealth() const;
 
+	void UpdateHealthProgressBar();
+
 	void SetInvincible(bool value);
 
 // ACharacter

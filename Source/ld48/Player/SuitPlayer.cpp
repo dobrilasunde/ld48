@@ -10,6 +10,8 @@
 #include "SuitPlayerController.h"
 #include <Camera/CameraShake.h>
 #include "PlayerGunComponent.h"
+#include "../UI/ldjam48HUD.h"
+#include "../UI/HudWidget.h"
 /*----------------------------------------------------------------------------------------------------*/
 ASuitPlayer::ASuitPlayer()
 {
@@ -245,6 +247,25 @@ float ASuitPlayer::GetHealth() const
 	return _health;
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::UpdateHealthProgressBar()
+{
+	ASuitPlayerController* playerController = Cast<ASuitPlayerController>(GetController());
+	if (playerController == nullptr)
+	{
+		return;
+	}
+
+	Aldjam48HUD* hud = Cast<Aldjam48HUD>(playerController->GetHUD());
+	if (hud != nullptr)
+	{
+		UHudWidget* hudWidget = hud->GetHudWidget();
+		if (hudWidget != nullptr)
+		{
+			hudWidget->SetHealthProgressBar(_health);
+		}
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::SetInvincible(bool value)
 {
 	_isInvincible = value;
@@ -327,7 +348,12 @@ void ASuitPlayer::OnInvulnerabilityTimer()
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::OnHealthChanged()
 {
-	
+	UpdateHealthProgressBar();
+
+	if (_health <= 0.0f)
+	{
+
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::OnDamageTaken()
