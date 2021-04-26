@@ -149,16 +149,17 @@ void ALevelGridCell::CollectComponents()
 	TArray<UChildActorComponent*> childActors;
 	GetComponents<UChildActorComponent>(childActors);
 
-	for (UChildActorComponent* childActor : childActors)
+	for (int32 i = childActors.Num() - 1; i >= 0; --i)
 	{
-		if (childActor == nullptr)
+		if (childActors[i] == nullptr)
 		{
 			continue;
 		}
 
-		if (childActor->GetChildActorClass().Get()->IsChildOf(ATargetPoint::StaticClass()))
+		if (childActors[i]->GetChildActorClass().Get()->IsChildOf(ATargetPoint::StaticClass()))
 		{
-			_spawnLocations.Add(childActor->GetComponentTransform().GetLocation());
+			_spawnLocations.Add(childActors[i]->GetComponentTransform().GetLocation());
+			childActors[i]->DestroyChildActor();
 		}
 	}
 }

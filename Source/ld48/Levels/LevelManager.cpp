@@ -121,6 +121,12 @@ APawn* ALevelManager::FindPlayerPawn() const
 /*----------------------------------------------------------------------------------------------------*/
 int32 ALevelManager::GetCurrentLevelEnemySpawnAmount() const
 {
-	return _maxEnemySpawnAmount[_currentLevelDifficulty];
+	int32 spawnAmount = -1;
+	if (!_maxEnemySpawnAmountPerDifficulty.Contains(_currentLevelDifficulty))
+	{
+		return spawnAmount;
+	}
+
+	return _maxEnemySpawnAmountPerDifficulty[_currentLevelDifficulty];
 }
 /*----------------------------------------------------------------------------------------------------*/

@@ -477,7 +477,7 @@ void ANPC::AttackTarget(AActor* target)
 
 	if (ASuitPlayer* targetCharacter = Cast<ASuitPlayer>(target))
 	{
-		targetCharacter->ApplyDamage(0.f);
+		targetCharacter->ApplyDamage(_npcDirection, _attackDamage);
 	}
 
 	//ResetMovement();

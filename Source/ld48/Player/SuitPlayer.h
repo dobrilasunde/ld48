@@ -31,7 +31,11 @@ public:
 
 	UPaperFlipbookComponent* GetMeleeAttackFlipbookComponent() const;
 
-	void ApplyDamage(float damage);
+	void ApplyDamage(EMovablePawnDirection direction, float damage);
+	void SetHealth(float health);
+	float GetHealth() const;
+
+	void SetInvincible(bool value);
 
 // ACharacter
 public:
@@ -45,6 +49,11 @@ private:
 
 	UFUNCTION()
 	void OnInvulnerabilityTimer();
+
+	void OnHealthChanged();
+	void OnDamageTaken();
+
+	EMovablePawnDirection GetOppositeDirection(EMovablePawnDirection direction);
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -105,8 +114,10 @@ private:
 	UPROPERTY();
 	UMaterialInstanceDynamic* _spriteMatInst;
 
-	bool _canTakeDamage = true;
+	bool _isInvincible = false;
 
 	FTimerHandle _invulnerabilityTimer;
+
+	float _health = 1.0f;
 };
 /*----------------------------------------------------------------------------------------------------*/

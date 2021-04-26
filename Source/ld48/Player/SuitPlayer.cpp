@@ -36,6 +36,11 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 		return;
 	}
 
+	if (_meleeAttackHitBox == nullptr)
+	{
+		return;
+	}
+
 	if (playerState == EMovablePawnState::Idle)
 	{
 		switch (playerDirection)
@@ -45,7 +50,7 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 			if (_idleRightFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_idleRightFlipbook);
-				flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+				flipbook->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 			}
 			break;
 		}
@@ -54,7 +59,7 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 			if (_idleLeftFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_idleLeftFlipbook);
-				flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+				flipbook->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
 			}
 			break;
 		}
@@ -85,7 +90,7 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 			if (_walkRightFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_walkRightFlipbook);
-				flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+				flipbook->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 			}
 			break;
 		}
@@ -94,7 +99,7 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 			if (_walkLeftFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_walkLeftFlipbook);
-				flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+				flipbook->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
 			}
 			break;
 		}
@@ -120,11 +125,11 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 	{
 		if (playerDirection == EMovablePawnDirection::Left)
 		{
-			_meleeAttackFlipbookComponent->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+			_meleeAttackFlipbookComponent->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
 		}
 		else if (playerDirection == EMovablePawnDirection::Right)
 		{
-			_meleeAttackFlipbookComponent->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+			_meleeAttackFlipbookComponent->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 		}
 
 		flipbook->SetHiddenInGame(true);
@@ -199,21 +204,56 @@ UPaperFlipbookComponent* ASuitPlayer::GetMeleeAttackFlipbookComponent() const
 	return _meleeAttackFlipbookComponent;
 }
 /*----------------------------------------------------------------------------------------------------*/
-void ASuitPlayer::ApplyDamage(float damage)
+void ASuitPlayer::ApplyDamage(EMovablePawnDirection direction, float damage)
 {
-	if (!_canTakeDamage)
+	if (_isInvincible)
 	{
 		return;
 	}
 
-	if (_spriteMatInst != nullptr)
+	ASuitPlayerController* PlayerController = Cast<ASuitPlayerController>(GetController());
+	if (PlayerController == nullptr)
 	{
-		_spriteMatInst->SetScalarParameterValue("BlinkIntensity", 1.f);
+		return;
 	}
 
-	_canTakeDamage = false;
+	if(GetOppositeDirection(direction) == PlayerController->GetPlayerDirection())
+	{
+		return;
+	}
 
-	GetWorldTimerManager().SetTimer(_invulnerabilityTimer, this, &ASuitPlayer::OnInvulnerabilityTimer, _invulnerabilityOnDamageDuration);
+	SetHealth(_health - damage);
+
+	OnDamageTaken();
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::SetHealth(float health)
+{
+	if (_health == health)
+	{
+		return;
+	}
+
+	_health = health;
+	_health = FMath::Clamp(_health, 0.0f, 1.0f);
+
+	OnHealthChanged();
+}
+/*----------------------------------------------------------------------------------------------------*/
+float ASuitPlayer::GetHealth() const
+{
+	return _health;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::SetInvincible(bool value)
+{
+	_isInvincible = value;
+
+	if (_spriteMatInst != nullptr)
+	{
+		int32 blinkIntensity = value ? 1 : 0;
+		_spriteMatInst->SetScalarParameterValue("BlinkIntensity", 1.f);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
@@ -282,11 +322,49 @@ void ASuitPlayer::ShakeCamera()
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::OnInvulnerabilityTimer()
 {
-	_canTakeDamage = true;
-
-	if (_spriteMatInst != nullptr)
+	SetInvincible(false);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::OnHealthChanged()
+{
+	
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::OnDamageTaken()
+{
+	if (!_isInvincible)
 	{
-		_spriteMatInst->SetScalarParameterValue("BlinkIntensity", 0.f);
+		SetInvincible(true);
+		GetWorldTimerManager().SetTimer(_invulnerabilityTimer, this, &ASuitPlayer::OnInvulnerabilityTimer, _invulnerabilityOnDamageDuration);
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+EMovablePawnDirection ASuitPlayer::GetOppositeDirection(EMovablePawnDirection direction)
+{
+	switch (direction)
+	{
+		case EMovablePawnDirection::Back:
+		{
+			return EMovablePawnDirection::Front;
+		}
+		case EMovablePawnDirection::Front:
+		{
+			return EMovablePawnDirection::Back;
+		}
+		case EMovablePawnDirection::Left:
+		{
+			return EMovablePawnDirection::Right;
+		}
+		case EMovablePawnDirection::Right:
+		{
+			return EMovablePawnDirection::Left;
+		}
+		default:
+		{
+			break;
+		}
+	}
+
+	return EMovablePawnDirection::Left;
 }
 /*----------------------------------------------------------------------------------------------------*/

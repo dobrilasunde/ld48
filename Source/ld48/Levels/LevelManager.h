@@ -44,7 +44,10 @@ private:
 	TMap<ELevelName, TSubclassOf<ALevelPrototype>> _levels;
 
 	UPROPERTY(EditDefaultsOnly)
-	TMap<ELevelDifficulty, int32> _maxEnemySpawnAmount;
+	TMap<ELevelDifficulty, int32> _maxEnemySpawnAmountPerDifficulty;
+
+	UPROPERTY(EditDefaultsOnly)
+	int32 _remainingEnemies = 100;
 
 private:
 	UPROPERTY()
