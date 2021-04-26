@@ -70,6 +70,12 @@ private:
 	UPlayerGunComponent* _gunComponent;
 
 private:
+	UPROPERTY(EditAnywhere, Category = "Player|Audio")
+	USoundBase* _gunAudio;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Audio")
+	TArray<USoundBase*> _meleeAudios;
+
 	UPROPERTY(EditAnywhere, Category = "Player|Material")
 	UMaterialInterface* _spriteMaterial;
 

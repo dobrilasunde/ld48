@@ -226,7 +226,11 @@ void ASuitPlayer::MeleeAttack(EMovablePawnDirection attackDirection)
 				return;
 			}
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, *overlappingActor->GetName());
+	}
+
+	if (_meleeAudios.Num() >= 0)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, _meleeAudios[FMath::RandRange(0, _meleeAudios.Num() - 1)], GetActorLocation());
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -241,6 +245,11 @@ void ASuitPlayer::Shoot(EMovablePawnDirection attackDirection)
 		}
 
 		_gunComponent->Shoot(direction);
+
+		if (_gunAudio != nullptr)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, _gunAudio, _gunComponent->GetComponentLocation());
+		}
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
