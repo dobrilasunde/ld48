@@ -22,6 +22,7 @@ public:
 	ASuitPlayer();
 
 	void SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection);
+	void UpdateFlipbook();
 
 	void StartWalk();
 	void StopWalk();
@@ -43,6 +44,8 @@ public:
 	void AddAmmo(int32 ammoCount);
 
 	void OnCinematicEvent(FCinematicEventData cinematicEvent);
+
+	void SetHasGun(bool value);
 
 // ACharacter
 public:
@@ -97,7 +100,31 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
 	UPaperFlipbook* _walkRightFlipbook;
 
-	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook|Gun")
+	UPaperFlipbook* _gunIdleDownFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook|Gun")
+	UPaperFlipbook* _gunIdleUpFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook|Gun")
+	UPaperFlipbook* _gunIdleLeftFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook|Gun")
+	UPaperFlipbook* _gunIdleRightFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook|Gun")
+	UPaperFlipbook* _gunWalkDownFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook|Gun")
+	UPaperFlipbook* _gunWalkUpFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook|Gun")
+	UPaperFlipbook* _gunWalkLeftFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook|Gun")
+	UPaperFlipbook* _gunWalkRightFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook|Gun")
 	UPaperFlipbook* _deathFlipbook;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
@@ -126,5 +153,7 @@ private:
 	FTimerHandle _invulnerabilityTimer;
 
 	float _health = 1.0f;
+
+	bool _hasGun = true;
 };
 /*----------------------------------------------------------------------------------------------------*/

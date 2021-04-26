@@ -49,25 +49,37 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 		{
 		case EMovablePawnDirection::Right:
 		{
-			if (_idleRightFlipbook != nullptr)
+			if (_hasGun && _gunIdleRightFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_gunIdleRightFlipbook);
+			}
+			else if (!_hasGun && _idleRightFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_idleRightFlipbook);
-				flipbook->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 			}
+			flipbook->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 			break;
 		}
 		case EMovablePawnDirection::Left:
 		{
-			if (_idleLeftFlipbook != nullptr)
+			if (_hasGun && _gunIdleLeftFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_gunIdleLeftFlipbook);
+			}
+			else if(!_hasGun && _idleLeftFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_idleLeftFlipbook);
-				flipbook->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
 			}
+			flipbook->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
 			break;
 		}
 		case EMovablePawnDirection::Back:
 		{
-			if (_idleUpFlipbook != nullptr)
+			if (_hasGun && _gunIdleUpFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_gunIdleUpFlipbook);
+			}
+			else if (!_hasGun && _idleUpFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_idleUpFlipbook);
 			}
@@ -75,7 +87,11 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 		}
 		case EMovablePawnDirection::Front:
 		{
-			if (_idleDownFlipbook != nullptr)
+			if (_hasGun && _gunIdleDownFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_gunIdleDownFlipbook);
+			}
+			else if (!_hasGun && _idleDownFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_idleDownFlipbook);
 			}
@@ -89,25 +105,37 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 		{
 		case EMovablePawnDirection::Right:
 		{
-			if (_walkRightFlipbook != nullptr)
+			if (_hasGun && _gunWalkRightFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_gunWalkRightFlipbook);
+			}
+			else if (!_hasGun && _walkRightFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_walkRightFlipbook);
-				flipbook->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 			}
+			flipbook->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 			break;
 		}
 		case EMovablePawnDirection::Left:
 		{
-			if (_walkLeftFlipbook != nullptr)
+			if (_hasGun && _gunWalkLeftFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_gunWalkLeftFlipbook);
+			}
+			else if (!_hasGun && _walkLeftFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_walkLeftFlipbook);
-				flipbook->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
 			}
+			flipbook->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
 			break;
 		}
 		case EMovablePawnDirection::Back:
 		{
-			if (_walkUpFlipbook != nullptr)
+			if (_hasGun && _gunWalkUpFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_gunWalkUpFlipbook);
+			}
+			else if (!_hasGun && _walkUpFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_walkUpFlipbook);
 			}
@@ -115,7 +143,11 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 		}
 		case EMovablePawnDirection::Front:
 		{
-			if (_walkDownFlipbook != nullptr)
+			if (_hasGun && _gunWalkDownFlipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_gunWalkDownFlipbook);
+			}
+			else if (!_hasGun && _walkDownFlipbook != nullptr)
 			{
 				flipbook->SetFlipbook(_walkDownFlipbook);
 			}
@@ -138,6 +170,17 @@ void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirecti
 		_meleeAttackFlipbookComponent->SetHiddenInGame(false);
 		_meleeAttackFlipbookComponent->PlayFromStart();
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::UpdateFlipbook()
+{
+	ASuitPlayerController* PlayerController = Cast<ASuitPlayerController>(GetController());
+	if (PlayerController == nullptr)
+	{
+		return;
+	}
+
+	SetFlipbook(PlayerController->GetPlayerState(), PlayerController->GetPlayerDirection());
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::OnMeleeAttackAnimationFinishedPlaying()
@@ -305,6 +348,13 @@ void ASuitPlayer::OnCinematicEvent(FCinematicEventData cinematicEvent)
 			hudWidget->OnCinematicEvent(cinematicEvent);
 		}
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::SetHasGun(bool value)
+{
+	_hasGun = value;
+
+	UpdateFlipbook();
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
