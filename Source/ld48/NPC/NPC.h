@@ -159,6 +159,9 @@ private:
 
 	EMovementInput _lastMovementInput;
 
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	float _minTargetDetectionDistance = 100.0f;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
 	UPaperFlipbook* _idleDownFlipbook;
