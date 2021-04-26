@@ -148,28 +148,24 @@ void ALevelGridCell::ActivateDoors()
 	if (_leftEdgeType == ECellEdgeType::Wall && _doorLeft != nullptr)
 	{
 		_doorLeft->Activate();
-		_doorLeft->Open();
 		return;
 	}
 
 	if (_rightEdgeType == ECellEdgeType::Wall && _doorRight != nullptr)
 	{
 		_doorRight->Activate();
-		_doorRight->Open();
 		return;
 	}
 
 	if (_topEdgeType == ECellEdgeType::Wall && _doorTop != nullptr)
 	{
 		_doorTop->Activate();
-		_doorTop->Open();
 		return;
 	}
 
 	if (_bottomEdgeType == ECellEdgeType::Wall && _doorBottom != nullptr)
 	{
 		_doorBottom->Activate();
-		_doorBottom->Open();
 		return;
 	}
 }
