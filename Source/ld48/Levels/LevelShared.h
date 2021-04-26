@@ -9,9 +9,10 @@ enum class ELevelName : uint8
 {
 	None,
 	LevelOffice,
+	LevelOfficeElevator,
+	LevelGarage,
 	LevelElevator,
 	LevelStairs,
-	LevelGarage,
 	Count UMETA(Hidden)
 };
 /*----------------------------------------------------------------------------------------------------*/
