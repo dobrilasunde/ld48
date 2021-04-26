@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 #include "HudWidget.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class UProgressBar;
@@ -19,12 +20,13 @@ public:
 	UHudWidget(const FObjectInitializer& ObjectInitializer);
 
 	void SetHealthProgressBar(float value);
+	void SetAmmoCount(int32 count);
 
 private:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	UProgressBar* _healthProgressBar;
-	
+
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
-	UOverlay* _healthOverlay;
+	UTextBlock* _ammoText;
 };
 /*----------------------------------------------------------------------------------------------------*/

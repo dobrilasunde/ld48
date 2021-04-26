@@ -35,6 +35,9 @@ private:
 	float _damage = 0.1f;
 
 	UPROPERTY(EditAnywhere)
+	float _lifetime = 5.f;
+
+	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* _projectileMovementComponent;
 
 	UPROPERTY(EditAnywhere)

@@ -47,6 +47,8 @@ void AProjectile::BeginPlay()
 		SetInstigator(owner);
 		owner->OnDestroyed.AddUObject(this, &AProjectile::OnOwnerDestroyed);
 	}
+
+	SetLifeSpan(_lifetime);
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
