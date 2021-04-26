@@ -38,10 +38,14 @@ private:
 	UTextBlock* _ammoText;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	UTextBlock* _enemyCountText;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	UTextBlock* _cinematicText;
 
 	UPROPERTY(EditDefaultsOnly)
 	TMap<ECinematicEventType, FText> _textPerCinematicEvent;
+
 
 private:
 	float _currentEventDuration = -1.f;

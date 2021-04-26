@@ -163,6 +163,14 @@ APawn* ANPC::FindPlayerPawn() const
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::OnDeathAnimationFinishedPlaying()
 {
+	if (Ald48WorldSettings* ws = Cast<Ald48WorldSettings>(GetWorldSettings()))
+	{
+		if (ALevelManager* levelManager = ws->GetLevelManager())
+		{
+			levelManager->OnEnemyDied();
+		}
+	}
+
 	Destroy();
 }
 /*----------------------------------------------------------------------------------------------------*/

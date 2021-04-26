@@ -22,7 +22,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type endPlayReason) override;
 
-private:
+public:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
 
@@ -41,7 +41,7 @@ private:
 	ELevelName _targetLevel;
 
 	UPROPERTY(EditDefaultsOnly)
-	float _activationTime = 0.5f;
+	float _activationTime = -1.f;
 
 	UPROPERTY(EditAnywhere)
 	UPaperSpriteComponent* _doorSprite;

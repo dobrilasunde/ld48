@@ -32,18 +32,14 @@ void ADoor::BeginPlay()
 
 	ChooseRandomTargetLevel();
 
-	if (Ald48WorldSettings* worldSettings = Cast<Ald48WorldSettings>(GetWorldSettings()))
-	{
-		if (ALevelManager* levelManager = worldSettings->GetLevelManager())
-		{
-			_isLocked = levelManager->IsLevelLocked(_targetLevel);
-		}
-	}
-
+	_isLocked = true;
 	OnIsLockedChanged();
 
 	_isActive = false;
-	GetWorldTimerManager().SetTimer(_isActiveTimerHandle, this, &ADoor::Activate, _activationTime);
+	if (_activationTime > 0)
+	{
+		GetWorldTimerManager().SetTimer(_isActiveTimerHandle, this, &ADoor::Activate, _activationTime);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ADoor::EndPlay(const EEndPlayReason::Type endPlayReason)
@@ -77,6 +73,7 @@ void ADoor::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherAct
 void ADoor::OnIsLockedChanged()
 {
 	_lockedDoorsSprite->SetVisibility(_isLocked);
+	_doorSprite->SetVisibility(!_isLocked);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ADoor::Open()
@@ -99,6 +96,9 @@ void ADoor::Open()
 void ADoor::Activate()
 {
 	_isActive = true;
+
+	_isLocked = false;
+	OnIsLockedChanged();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ADoor::ChooseRandomTargetLevel()

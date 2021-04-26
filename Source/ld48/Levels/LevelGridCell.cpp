@@ -6,6 +6,11 @@
 #include <Engine/TargetPoint.h>
 #include <Components/ChildActorComponent.h>
 /*----------------------------------------------------------------------------------------------------*/
+void ALevelGridCell::SetDoor(ADoor* door)
+{
+	UE_LOG(LogTemp, Log, TEXT(""));
+}
+/*----------------------------------------------------------------------------------------------------*/
 ALevelGridCell::ALevelGridCell()
 {
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
@@ -24,7 +29,6 @@ void ALevelGridCell::PostInitializeComponents()
 void ALevelGridCell::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridCell::SetLeftEdgeType(ECellEdgeType type)
@@ -33,6 +37,8 @@ void ALevelGridCell::SetLeftEdgeType(ECellEdgeType type)
 	{
 		return;
 	}
+
+	_leftEdgeType = type;
 
 	if (type == ECellEdgeType::Wall)
 	{
@@ -48,12 +54,14 @@ void ALevelGridCell::SetLeftEdgeType(ECellEdgeType type)
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
-void ALevelGridCell::SetRighttEdgeType(ECellEdgeType type)
+void ALevelGridCell::SetRightEdgeType(ECellEdgeType type)
 {
 	if (_rightEdgeComp_Wall == nullptr || _rightEdgeComp_Passage == nullptr)
 	{
 		return;
 	}
+
+	_rightEdgeType = type;
 
 	if (type == ECellEdgeType::Wall)
 	{
@@ -76,6 +84,8 @@ void ALevelGridCell::SetTopEdgeType(ECellEdgeType type)
 		return;
 	}
 
+	_topEdgeType = type;
+
 	if (type == ECellEdgeType::Wall)
 	{
 		_TopEdgeComp_Wall->SetHiddenInGame(false);
@@ -96,6 +106,8 @@ void ALevelGridCell::SetBottomEdgeType(ECellEdgeType type)
 	{
 		return;
 	}
+
+	_bottomEdgeType = type;
 
 	if (type == ECellEdgeType::Wall)
 	{
@@ -134,6 +146,37 @@ void ALevelGridCell::SetSpawnWeight(int32 weight)
 int32 ALevelGridCell::GetSpawnWeight() const
 {
 	return _spawnWeight;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelGridCell::ActivateDoors()
+{
+	if (_leftEdgeType == ECellEdgeType::Wall && _doorLeft != nullptr)
+	{
+		_doorLeft->Activate();
+		_doorLeft->Open();
+		return;
+	}
+
+	if (_rightEdgeType == ECellEdgeType::Wall && _doorRight != nullptr)
+	{
+		_doorRight->Activate();
+		_doorRight->Open();
+		return;
+	}
+
+	if (_topEdgeType == ECellEdgeType::Wall && _doorTop != nullptr)
+	{
+		_doorTop->Activate();
+		_doorTop->Open();
+		return;
+	}
+
+	if (_bottomEdgeType == ECellEdgeType::Wall && _doorBottom != nullptr)
+	{
+		_doorBottom->Activate();
+		_doorBottom->Open();
+		return;
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridCell::CollectComponents()

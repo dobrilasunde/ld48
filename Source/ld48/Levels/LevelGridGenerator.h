@@ -81,7 +81,6 @@ private:
 
 	TSubclassOf<ALevelGridCell> GetRandomCellClass() const;
 	ALevelGridCell* SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz);
-
 	
 private:
 	std::vector<std::vector<FCell>> _grid;

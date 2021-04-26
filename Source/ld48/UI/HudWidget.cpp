@@ -4,6 +4,8 @@
 #include "Components/ProgressBar.h"
 #include "Components/Overlay.h"
 #include "Components/Image.h"
+#include "../Levels/LevelManager.h"
+#include "../ld48WorldSettings.h"
 /*----------------------------------------------------------------------------------------------------*/
 UHudWidget::UHudWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -54,6 +56,17 @@ void UHudWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		if (_cinematicText != nullptr)
 		{
 			_cinematicText->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
+
+	if (_enemyCountText != nullptr)
+	{
+		if (Ald48WorldSettings* ws = Cast<Ald48WorldSettings>(GetWorld()->GetWorldSettings()))
+		{
+			if (ALevelManager* levelManager = ws->GetLevelManager())
+			{
+				_enemyCountText->SetText(FText::FromString(FString::Printf(TEXT("infected = %d"), levelManager->GetRemainingEnemies())));
+			}
 		}
 	}
 }

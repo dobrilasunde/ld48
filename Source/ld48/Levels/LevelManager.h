@@ -25,6 +25,9 @@ public:
 
 	void ResetLevels();
 
+	void OnEnemyDied();
+	int32 GetRemainingEnemies() const;
+
 private:
 	ALevelPrototype* LoadLevel(const ELevelName& level);
 	void UnloadCurrentLevel();

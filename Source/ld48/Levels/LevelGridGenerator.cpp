@@ -32,11 +32,16 @@ void ALevelGridGenerator::BeginPlay()
 				if (ALevelGridCell* cellActor = SpawnCell(cellLocation, GetRandomCellClass()))
 				{
 					cellActor->SetLeftEdgeType(cell.IsLeftOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
-					cellActor->SetRighttEdgeType(cell.IsRightOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
+					cellActor->SetRightEdgeType(cell.IsRightOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
 					cellActor->SetTopEdgeType(cell.IsTopOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
 					cellActor->SetBottomEdgeType(cell.IsBottomOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
 
 					cellActor->SetSpawnWeight(cell.TileNumber);
+
+					if (cell.TileState == ETileState::End)
+					{
+						cellActor->ActivateDoors();
+					}
 
 					SpawnedCells.Push(cellActor);
 

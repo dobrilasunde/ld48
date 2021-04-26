@@ -131,3 +131,13 @@ int32 ALevelManager::GetCurrentLevelEnemySpawnAmount() const
 	return _maxEnemySpawnAmountPerDifficulty[_currentLevelDifficulty];
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ALevelManager::OnEnemyDied()
+{
+	_remainingEnemies = FMath::Max(_remainingEnemies - 1, 0);
+}
+/*----------------------------------------------------------------------------------------------------*/
+int32 ALevelManager::GetRemainingEnemies() const
+{
+	return _remainingEnemies;
+}
+/*----------------------------------------------------------------------------------------------------*/

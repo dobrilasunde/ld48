@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Door.h"
+#include <Components/ChildActorComponent.h>
 #include "LevelGridCell.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 UENUM(BlueprintType)
@@ -46,6 +48,18 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	FString BottomEdgeName_Passage	= "BottomEdge_Passage";
 
+	UPROPERTY(EditDefaultsOnly)
+	ADoor* _doorLeft;
+	UPROPERTY(EditDefaultsOnly)
+	ADoor* _doorRight;
+	UPROPERTY(EditDefaultsOnly)
+	ADoor* _doorTop;
+	UPROPERTY(EditDefaultsOnly)
+	ADoor* _doorBottom;
+
+	UFUNCTION(BlueprintCallable)
+	void SetDoor(ADoor* door);
+
 public:
 	ALevelGridCell();
 
@@ -53,7 +67,7 @@ public:
 	virtual void BeginPlay() override;
 
 	void SetLeftEdgeType(ECellEdgeType type);
-	void SetRighttEdgeType(ECellEdgeType type);
+	void SetRightEdgeType(ECellEdgeType type);
 	void SetTopEdgeType(ECellEdgeType type);
 	void SetBottomEdgeType(ECellEdgeType type);
 
@@ -63,6 +77,8 @@ public:
 
 	void SetSpawnWeight(int32 weight);
 	int32 GetSpawnWeight() const;
+
+	void ActivateDoors();
 
 private:
 	UPaperSpriteComponent* _leftEdgeComp_Wall;
@@ -74,6 +90,11 @@ private:
 	UPaperSpriteComponent* _rightEdgeComp_Passage;
 	UPaperSpriteComponent* _topEdgeComp_Passage;
 	UPaperSpriteComponent* _bottomEdgeComp_Passage;
+
+	ECellEdgeType _leftEdgeType = ECellEdgeType::Wall;
+	ECellEdgeType _rightEdgeType = ECellEdgeType::Wall;
+	ECellEdgeType _topEdgeType = ECellEdgeType::Wall;
+	ECellEdgeType _bottomEdgeType = ECellEdgeType::Wall;
 
 	UPROPERTY(EditAnywhere)
 	USceneComponent* _playerStartPosition;
