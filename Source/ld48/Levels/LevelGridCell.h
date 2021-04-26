@@ -12,6 +12,13 @@ enum class ECellEdgeType : uint8
 	Passage
 };
 /*----------------------------------------------------------------------------------------------------*/
+struct FSpawnMarker
+{
+	FVector SpawnLocation = FVector::ZeroVector;
+	bool IsSpawned = false;
+	int32 Weight = 1;
+};
+/*----------------------------------------------------------------------------------------------------*/
 class UPaperSpriteComponent;
 class USceneComponent;
 /*----------------------------------------------------------------------------------------------------*/
@@ -52,7 +59,11 @@ public:
 
 	const FTransform& GetPlayerStart() const;
 
-	const TArray<FVector>& GetSpawnLocations() const;
+	TArray<FSpawnMarker>& GetSpawnLocations();
+
+	void SetSpawnWeight(int32 weight);
+	int32 GetSpawnWeight() const;
+
 private:
 	UPaperSpriteComponent* _leftEdgeComp_Wall;
 	UPaperSpriteComponent* _rightEdgeComp_Wall;
@@ -67,7 +78,10 @@ private:
 	UPROPERTY(EditAnywhere)
 	USceneComponent* _playerStartPosition;
 
-	TArray<FVector> _spawnLocations;
+	TArray<FSpawnMarker> _spawnLocations;
+
+	UPROPERTY(VisibleAnywhere)
+	int32 _spawnWeight = 1;
 
 private:
 	void CollectComponents();

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "LevelGridCell.h"
 #include "LevelPrototype.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class ALevelGridGenerator;
@@ -31,6 +32,8 @@ public:
 
 private:
 	void ShuffleSpawners(TArray<FVector>& Array);
+
+	FSpawnMarker* ChooseRandomSpawner();
 
 private:
 	UPROPERTY()

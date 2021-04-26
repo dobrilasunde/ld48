@@ -116,9 +116,24 @@ const FTransform& ALevelGridCell::GetPlayerStart() const
 	return _playerStartPosition->GetComponentToWorld();
 }
 /*----------------------------------------------------------------------------------------------------*/
-const TArray<FVector>& ALevelGridCell::GetSpawnLocations() const
+TArray<FSpawnMarker>& ALevelGridCell::GetSpawnLocations()
 {
 	return _spawnLocations;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelGridCell::SetSpawnWeight(int32 weight)
+{
+	_spawnWeight = weight;
+
+	for (FSpawnMarker& marker : _spawnLocations)
+	{
+		marker.Weight = weight;
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+int32 ALevelGridCell::GetSpawnWeight() const
+{
+	return _spawnWeight;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridCell::CollectComponents()
@@ -158,7 +173,9 @@ void ALevelGridCell::CollectComponents()
 
 		if (childActors[i]->GetChildActorClass().Get()->IsChildOf(ATargetPoint::StaticClass()))
 		{
-			_spawnLocations.Add(childActors[i]->GetComponentTransform().GetLocation());
+			FSpawnMarker spawnMarker;
+			spawnMarker.SpawnLocation = childActors[i]->GetComponentTransform().GetLocation();
+			_spawnLocations.Add(spawnMarker);
 			childActors[i]->DestroyChildActor();
 		}
 	}

@@ -36,6 +36,8 @@ void ALevelGridGenerator::BeginPlay()
 					cellActor->SetTopEdgeType(cell.IsTopOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
 					cellActor->SetBottomEdgeType(cell.IsBottomOpen ? ECellEdgeType::Passage : ECellEdgeType::Wall);
 
+					cellActor->SetSpawnWeight(cell.TileNumber);
+
 					SpawnedCells.Push(cellActor);
 
 					if (cell.TileState == ETileState::Start)
@@ -56,6 +58,8 @@ void ALevelGridGenerator::BeginPlay()
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("\n%s"), *str);
+
+	SaveSpawnMarkers();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridGenerator::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -73,13 +77,23 @@ const FVector& ALevelGridGenerator::GetPlayerStartLocation() const
 	return _playerStartLocation;
 }
 /*----------------------------------------------------------------------------------------------------*/
-TArray<FVector> ALevelGridGenerator::GetSpawnLocations()
+TArray<FSpawnMarker>& ALevelGridGenerator::GetAllSpawnMarkers()
 {
-	TArray<FVector> spawnLocations;
+	return _allSpawnMarkers;
+}
+/*----------------------------------------------------------------------------------------------------*/
+const TArray<ALevelGridCell*>& ALevelGridGenerator::GetSpawnedCells() const
+{
+	return SpawnedCells;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelGridGenerator::SaveSpawnMarkers()
+{
+	_allSpawnMarkers.Empty();
 
 	if (SpawnedCells.Num() == 0)
 	{
-		return spawnLocations;
+		return;
 	}
 
 	for (ALevelGridCell* cell : SpawnedCells)
@@ -89,10 +103,8 @@ TArray<FVector> ALevelGridGenerator::GetSpawnLocations()
 			continue;
 		}
 
-		spawnLocations.Append(cell->GetSpawnLocations());
+		_allSpawnMarkers.Append(cell->GetSpawnLocations());
 	}
-
-	return spawnLocations;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelGridGenerator::Initialize()
@@ -256,11 +268,20 @@ bool ALevelGridGenerator::FindPath(FCell* start, FCell* goal)
 void ALevelGridGenerator::UpdatePathTiles(FCell* start)
 {
 	FCell* t = start->Parent;
+
+	int32 TileCount = 1;
+	t->TileNumber = TileCount;
+	
 	while (t != GetEndCell())
 	{
+		TileCount++;
+
 		t->TileState = ETileState::Path;	
+		t->TileNumber = TileCount;
 		t = t->Parent;
 	}
+
+	t->TileNumber = TileCount + 1;
 }
 /*----------------------------------------------------------------------------------------------------*/
 const std::vector<std::vector<FCell>>& ALevelGridGenerator::GetGrid() const

@@ -13,6 +13,7 @@
 #include "../Player/SuitPlayer.h"
 #include "../Player/SuitPlayerController.h"
 #include "../ld48WorldSettings.h"
+#include <DrawDebugHelpers.h>
 /*----------------------------------------------------------------------------------------------------*/
 ANPC::ANPC()
 {
@@ -198,6 +199,22 @@ void ANPC::Tick(float deltaTime)
 
 	if (_targetPlayer != nullptr)
 	{
+		FVector TraceStart = GetActorLocation();
+		FVector TraceEnd = _targetPlayer->GetActorLocation();
+		if (FVector::Dist(TraceStart, TraceEnd) > _minTargetDetectionDistance)
+		{
+			return;
+		}
+
+		FHitResult hitResult;
+		bool bSuccess = GetWorld()->LineTraceSingleByChannel(hitResult, TraceStart, TraceEnd, ECC_Visibility);
+		if (bSuccess)
+		{
+			return;
+		}
+
+		//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor(238, 0, 238), false);
+		
 		MoveToTarget(_targetPlayer.Get());
 	}
 

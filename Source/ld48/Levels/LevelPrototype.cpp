@@ -62,17 +62,18 @@ void ALevelPrototype::SpawnEnemies(int32 amount)
 		return;
 	}
 
-	TArray<FVector> spawnLocations = _levelGridGenerator->GetSpawnLocations();
-	if (spawnLocations.Num() == 0)
+	for (int32 i = 0; i < amount; i++) 
 	{
-		return;
-	}
+		FSpawnMarker* spawnMarker = ChooseRandomSpawner();
+		if (spawnMarker == nullptr)
+		{
+			continue;
+		}
 
-	ShuffleSpawners(spawnLocations);
-
-	for (int32 i = 0; i < amount; ++i)
-	{
-		GetWorld()->SpawnActor<ANPC>(_enemyClass, spawnLocations[i], FRotator::ZeroRotator);
+		if (GetWorld()->SpawnActor<ANPC>(_enemyClass, spawnMarker->SpawnLocation, FRotator::ZeroRotator))
+		{
+			spawnMarker->IsSpawned = true;
+		}
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -92,5 +93,48 @@ void ALevelPrototype::ShuffleSpawners(TArray<FVector>& Array)
 			Array.Swap(i, j);
 		}
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+FSpawnMarker* ALevelPrototype::ChooseRandomSpawner()
+{
+	if (_levelGridGenerator == nullptr)
+	{
+		return nullptr;
+	}
+
+	TArray<FSpawnMarker>& SpawnMarkers = _levelGridGenerator->GetAllSpawnMarkers();
+	if (SpawnMarkers.Num() == 0)
+	{
+		return nullptr;
+	}
+
+	int32 sumWeight = 0;
+	for (int32 i = 0; i < SpawnMarkers.Num(); i++)
+	{
+		if (SpawnMarkers[i].IsSpawned)
+		{
+			continue;
+		}
+
+		sumWeight += SpawnMarkers[i].Weight;
+	}
+
+	int32 randomNumber = FMath::RandRange(0, sumWeight);
+	int32 cumulativeWeight = 0;
+	for (int32 i = 0; i < SpawnMarkers.Num(); i++)
+	{
+		if (SpawnMarkers[i].IsSpawned)
+		{
+			continue;
+		}
+
+		cumulativeWeight += SpawnMarkers[i].Weight;
+		if (cumulativeWeight > randomNumber)
+		{
+			return &SpawnMarkers[i];
+		}
+	}
+
+	return nullptr;
 }
 /*----------------------------------------------------------------------------------------------------*/

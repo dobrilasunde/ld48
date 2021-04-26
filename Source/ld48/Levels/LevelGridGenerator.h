@@ -29,6 +29,8 @@ struct FCell
 
 	int32 x = -1;
 	int32 y = -1;
+
+	int32 TileNumber = 1;
 };
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
@@ -44,8 +46,12 @@ public:
 
 	const FVector& GetPlayerStartLocation() const;
 
-	TArray<FVector> GetSpawnLocations();
+	TArray<FSpawnMarker>& GetAllSpawnMarkers();
 	
+	const TArray<ALevelGridCell*>& GetSpawnedCells() const;
+
+	void SaveSpawnMarkers();
+
 public:
 	UPROPERTY(EditDefaultsOnly)
 	int32 RowNum = 4;
@@ -76,6 +82,7 @@ private:
 	TSubclassOf<ALevelGridCell> GetRandomCellClass() const;
 	ALevelGridCell* SpawnCell(FVector location, TSubclassOf<ALevelGridCell> clazz);
 
+	
 private:
 	std::vector<std::vector<FCell>> _grid;
 
@@ -87,5 +94,7 @@ private:
 
 	UPROPERTY()
 	FVector _playerStartLocation = FVector::ZeroVector;
+
+	TArray<FSpawnMarker> _allSpawnMarkers;
 };
 /*----------------------------------------------------------------------------------------------------*/
