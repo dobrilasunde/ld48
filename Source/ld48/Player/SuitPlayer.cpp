@@ -290,6 +290,23 @@ void ASuitPlayer::AddAmmo(int32 ammoCount)
 	UpdateUI();
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::OnCinematicEvent(FCinematicEventData cinematicEvent)
+{
+	ASuitPlayerController* playerController = Cast<ASuitPlayerController>(GetController());
+	if (playerController == nullptr)
+	{
+		return;
+	}
+
+	if (Aldjam48HUD* hud = Cast<Aldjam48HUD>(playerController->GetHUD()))
+	{
+		if (UHudWidget* hudWidget = hud->GetHudWidget())
+		{
+			hudWidget->OnCinematicEvent(cinematicEvent);
+		}
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
 /*override*/
 void ASuitPlayer::BeginPlay()
 {

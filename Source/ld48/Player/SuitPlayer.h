@@ -4,6 +4,7 @@
 
 #include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperCharacter.h"
 #include "../Misc/MovablePawnsShared.h"
+#include "../Items/CinematicShared.h"
 #include "SuitPlayer.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class UBoxComponent;
@@ -40,6 +41,8 @@ public:
 	void SetInvincible(bool value);
 
 	void AddAmmo(int32 ammoCount);
+
+	void OnCinematicEvent(FCinematicEventData cinematicEvent);
 
 // ACharacter
 public:
