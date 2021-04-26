@@ -68,6 +68,9 @@ protected:
 
 	virtual void EndPlay(const EEndPlayReason::Type endPlayReason) override;
 
+	UFUNCTION()
+	virtual void OnDeathAnimationFinishedPlaying();
+
 private:
 	void SnapLocation();
 
@@ -83,9 +86,6 @@ private:
 	void TickHitEffects(float deltaTime);
 
 	APawn* FindPlayerPawn() const;
-
-	UFUNCTION()
-	void OnDeathAnimationFinishedPlaying();
 
 	UFUNCTION()
 	void OnAttackAnimationFinishedPlaying();

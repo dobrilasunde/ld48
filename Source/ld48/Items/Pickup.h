@@ -2,34 +2,36 @@
 /*----------------------------------------------------------------------------------------------------*/
 #pragma once
 
-#include "NPC.h"
-#include "BossNPC.generated.h"
+#include "Pickup.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
- class APickup;
+class UPaperSpriteComponent;
+class USphereComponent;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
-class LD48_API ABossNPC : public ANPC
+class LD48_API APickup : public AActor
 {
 	GENERATED_BODY()
 
 public:
-	ABossNPC();
+	APickup();
 
-public:
-	virtual void Tick(float DeltaTime) override;
+	UPaperSpriteComponent* GetSpriteComponent() const;
+
+protected:
 	virtual void BeginPlay() override;
-
-	virtual void MoveToTarget(AActor* target) override;
-	virtual void OnArrivedToTarget(AActor* target) override;
-	virtual void AttackTarget(AActor* target) override;
-
-	virtual void OnDeathAnimationFinishedPlaying() override;
 
 private:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
 
+private:
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<APickup> _pickupClass;
+	UPaperSpriteComponent* _spriteComponent;
+
+	UPROPERTY(EditAnywhere)
+	USphereComponent* _sphereComponent;
+
+	UPROPERTY(EditAnywhere)
+	int32 _ammo = 10;
 };
 /*----------------------------------------------------------------------------------------------------*/

@@ -5,6 +5,7 @@
 #include "../Player/SuitPlayerController.h"
 #include "Components/CapsuleComponent.h"
 #include "../Player/Projectile.h"
+#include "../Items/Pickup.h"
 /*----------------------------------------------------------------------------------------------------*/
 ABossNPC::ABossNPC(): Super()
 {
@@ -55,6 +56,16 @@ void ABossNPC::OnArrivedToTarget(AActor* target)
 void ABossNPC::AttackTarget(AActor* target)
 {
 	Super::AttackTarget(target);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ABossNPC::OnDeathAnimationFinishedPlaying()
+{
+	if (_pickupClass)
+	{
+		APickup* pickup = GetWorld()->SpawnActor<APickup>(_pickupClass, GetActorLocation(), GetActorRotation());
+	}
+
+	Super::OnDeathAnimationFinishedPlaying();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ABossNPC::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)

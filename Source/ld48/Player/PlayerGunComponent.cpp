@@ -27,6 +27,11 @@ int32 UPlayerGunComponent::GetAmmoCount() const
 	return _ammoCount;
 }
 /*----------------------------------------------------------------------------------------------------*/
+void UPlayerGunComponent::SetAmmoCount(int32 value)
+{
+	_ammoCount = value;
+}
+/*----------------------------------------------------------------------------------------------------*/
 void UPlayerGunComponent::SpawnProjectile(FVector direction)
 {
 	if (_projectileClass == nullptr)
