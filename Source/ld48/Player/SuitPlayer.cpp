@@ -280,6 +280,16 @@ void ASuitPlayer::SetInvincible(bool value)
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ASuitPlayer::AddAmmo(int32 ammoCount)
+{
+	if (_gunComponent != nullptr)
+	{
+		_gunComponent->SetAmmoCount(_gunComponent->GetAmmoCount() + ammoCount);
+	}
+
+	UpdateUI();
+}
+/*----------------------------------------------------------------------------------------------------*/
 /*override*/
 void ASuitPlayer::BeginPlay()
 {

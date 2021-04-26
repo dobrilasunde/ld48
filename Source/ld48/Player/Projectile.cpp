@@ -31,6 +31,11 @@ void AProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 /*----------------------------------------------------------------------------------------------------*/
+void AProjectile::SetDirection(EMovablePawnDirection direction)
+{
+	_direction = direction;
+}
+/*----------------------------------------------------------------------------------------------------*/
 /*override*/
 void AProjectile::BeginPlay()
 {
@@ -69,8 +74,9 @@ void AProjectile::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* ot
 
 	if (ANPC* npc = Cast<ANPC>(otherActor))
 	{
-		EMovablePawnDirection attackDirection = (npc->GetActorLocation().X - GetActorLocation().X) >= 0.0f ? EMovablePawnDirection::Right : EMovablePawnDirection::Left;
-		npc->ApplyDamage(attackDirection);
+// 		float xDirection = npc->GetActorLocation().X - GetActorLocation().X;
+// 		EMovablePawnDirection attackDirection = (xDirection >= 0.0f) ? EMovablePawnDirection::Right : EMovablePawnDirection::Left;
+		npc->ApplyDamage(_direction);
 		Destroy();
 	}
 }

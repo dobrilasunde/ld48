@@ -208,14 +208,12 @@ void ANPC::Tick(float deltaTime)
 
 		FHitResult hitResult;
 		bool bSuccess = GetWorld()->LineTraceSingleByChannel(hitResult, TraceStart, TraceEnd, ECC_Visibility);
-		if (bSuccess)
+		if (!bSuccess)
 		{
-			return;
+			MoveToTarget(_targetPlayer.Get());
 		}
 
-		//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor(238, 0, 238), false);
-		
-		MoveToTarget(_targetPlayer.Get());
+		//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor(238, 0, 238), false);	
 	}
 
 	if (_npcState != EMovablePawnState::Attacking)
@@ -403,6 +401,16 @@ void ANPC::SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDire
 		_attackFlipbook->SetHiddenInGame(false);
 		_attackFlipbook->PlayFromStart();
 	}
+	else if (_npcState == EMovablePawnState::Dying)
+	{
+		if (_deathFlipbookComponent != nullptr && GetSprite() != nullptr)
+		{
+			flipbook->SetHiddenInGame(true);
+			_attackFlipbook->SetHiddenInGame(true);
+			_deathFlipbookComponent->SetHiddenInGame(false);
+			_deathFlipbookComponent->PlayFromStart();
+		}
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::Reset()
@@ -416,6 +424,11 @@ void ANPC::Reset()
 /*virtual*/
 void ANPC::MoveToTarget(AActor* target)
 {
+	if (_npcState == EMovablePawnState::Dying)
+	{
+		return;
+	}
+
 	if (target == nullptr)
 	{
 		return;
@@ -543,12 +556,7 @@ void ANPC::OnHealthChanged()
 {
 	if (_health <= 0.0f)
 	{
-		if (_deathFlipbookComponent != nullptr && GetSprite() != nullptr)
-		{
-			GetSprite()->SetHiddenInGame(true);
-			_deathFlipbookComponent->SetHiddenInGame(false);
-			_deathFlipbookComponent->PlayFromStart();
-		}
+		SetNPCState(EMovablePawnState::Dying);
 
 // 		if (Ald48WorldSettings* ws = Cast<Ald48WorldSettings>(GetWorldSettings()))
 // 		{

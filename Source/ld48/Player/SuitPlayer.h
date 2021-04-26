@@ -39,6 +39,8 @@ public:
 
 	void SetInvincible(bool value);
 
+	void AddAmmo(int32 ammoCount);
+
 // ACharacter
 public:
 	virtual void BeginPlay() override;

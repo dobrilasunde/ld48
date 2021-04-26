@@ -2,25 +2,20 @@
 /*----------------------------------------------------------------------------------------------------*/
 #pragma once
 
-#include "../Misc/MovablePawnsShared.h"
-#include "Projectile.generated.h"
+#include "Pickup.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
-class UPaperFlipbookComponent;
-class UProjectileMovementComponent;
+class UPaperSpriteComponent;
 class USphereComponent;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
-class LD48_API AProjectile : public AActor
+class LD48_API APickup : public AActor
 {
 	GENERATED_BODY()
 
 public:
-	AProjectile();
+	APickup();
 
-	UPaperFlipbookComponent* GetFlipbook() const;
-
-	virtual void Tick(float DeltaTime) override;
-	void SetDirection(EMovablePawnDirection direction);
+	UPaperSpriteComponent* GetSpriteComponent() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -30,25 +25,23 @@ private:
 	void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
 
 	UFUNCTION()
-	void OnOwnerDestroyed();
+	void OnDisabledTimer();
 
 private:
 	UPROPERTY(EditAnywhere)
-	float _damage = 0.1f;
-
-	UPROPERTY(EditAnywhere)
-	float _lifetime = 5.f;
-
-	UPROPERTY(EditAnywhere)
-	UProjectileMovementComponent* _projectileMovementComponent;
-
-	UPROPERTY(EditAnywhere)
-	UPaperFlipbookComponent* _flipbookComponent;
+	UPaperSpriteComponent* _spriteComponent;
 
 	UPROPERTY(EditAnywhere)
 	USphereComponent* _sphereComponent;
 
-	UPROPERTY(VisibleAnywhere)
-	EMovablePawnDirection _direction;
+	UPROPERTY(EditAnywhere)
+	int32 _ammo = 10;
+
+	FTimerHandle _disabledTimer;
+
+	UPROPERTY(EditAnywhere)
+	float _disabledDuration = 2.f;
+
+	bool _disabled = true;
 };
 /*----------------------------------------------------------------------------------------------------*/

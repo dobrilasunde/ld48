@@ -13,6 +13,7 @@ class LD48_API UPlayerGunComponent : public USceneComponent
 public:
 	void Shoot(FVector direction);
 	int32 GetAmmoCount() const;
+	void SetAmmoCount(int32 value);
 
 private:
 	UPROPERTY(EditDefaultsOnly)

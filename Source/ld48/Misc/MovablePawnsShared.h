@@ -9,7 +9,8 @@ enum class EMovablePawnState : uint8
 	None,
 	Idle,
 	Walking,
-	Attacking
+	Attacking,
+	Dying
 };
 /*----------------------------------------------------------------------------------------------------*/
 UENUM(BlueprintType)
