@@ -90,6 +90,9 @@ private:
 	UFUNCTION()
 	void OnAttackAnimationFinishedPlaying();
 
+	UFUNCTION()
+	void OnAudioTimer();
+
 protected:
 	float _health = 1.0f;
 
@@ -162,6 +165,8 @@ private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
 	float _minTargetDetectionDistance = 100.0f;
 
+	FTimerHandle _soundsTimer;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
 	UPaperFlipbook* _idleDownFlipbook;
@@ -189,5 +194,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "NPC")
 	UAudioComponent* _audioComponent;
+
+	UPROPERTY(EditAnywhere, Category = "NPC")
+	TArray<USoundBase*> _sounds;
 };
 /*----------------------------------------------------------------------------------------------------*/

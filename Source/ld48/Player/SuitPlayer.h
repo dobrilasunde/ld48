@@ -5,6 +5,7 @@
 #include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperCharacter.h"
 #include "../Misc/MovablePawnsShared.h"
 #include "../Items/CinematicShared.h"
+#include <Components/AudioComponent.h>
 #include "SuitPlayer.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class UBoxComponent;
@@ -135,6 +136,9 @@ private:
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	UPaperFlipbookComponent* _meleeAttackFlipbookComponent;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	UAudioComponent* _walkAudioComponent;
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* _meleeAttackHitBox;

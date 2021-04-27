@@ -189,6 +189,16 @@ void ANPC::OnAttackAnimationFinishedPlaying()
 	SetNPCState(EMovablePawnState::Idle);
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ANPC::OnAudioTimer()
+{
+	if (_sounds.Num() > 0)
+	{
+		_audioComponent->SetSound(_sounds[FMath::RandRange(0, _sounds.Num() - 1)]);
+		_audioComponent->Play();
+		GetWorldTimerManager().SetTimer(_soundsTimer, this, &ANPC::OnAudioTimer, FMath::FRandRange(4.f, 8.f));
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
 UPaperFlipbookComponent* ANPC::GetAttackFlipbook() const
 {
 	return _attackFlipbook;
@@ -666,6 +676,8 @@ void ANPC::BeginPlay()
 	}
 
 	_attackDelayTimer = _attackDelay;
+
+	GetWorldTimerManager().SetTimer(_soundsTimer, this, &ANPC::OnAudioTimer, FMath::FRandRange(4.f, 6.f));
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::EndPlay(const EEndPlayReason::Type endPlayReason)

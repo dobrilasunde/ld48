@@ -28,6 +28,9 @@ ASuitPlayer::ASuitPlayer()
 
 	_gunComponent = CreateDefaultSubobject<UPlayerGunComponent>(TEXT("GunComponent"));
 	_gunComponent->SetupAttachment(RootComponent);
+
+	_walkAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Walk Audio"));
+	_walkAudioComponent->SetupAttachment(RootComponent);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection)
@@ -198,12 +201,18 @@ void ASuitPlayer::OnMeleeAttackAnimationFinishedPlaying()
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::StartWalk()
 {
-
+	if (_walkAudioComponent != nullptr)
+	{
+		_walkAudioComponent->Play();
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::StopWalk()
 {
-
+	if (_walkAudioComponent != nullptr)
+	{
+		_walkAudioComponent->Stop();
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::MeleeAttack(EMovablePawnDirection attackDirection)
@@ -211,6 +220,11 @@ void ASuitPlayer::MeleeAttack(EMovablePawnDirection attackDirection)
 	if (_meleeAttackHitBox == nullptr)
 	{
 		return;
+	}
+
+	if (_meleeAudios.Num() >= 0)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, _meleeAudios[FMath::RandRange(0, _meleeAudios.Num() - 1)], GetActorLocation());
 	}
 
 	TArray<AActor*> overlappingActors;
@@ -227,11 +241,6 @@ void ASuitPlayer::MeleeAttack(EMovablePawnDirection attackDirection)
 			}
 		}
 	}
-
-	if (_meleeAudios.Num() >= 0)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, _meleeAudios[FMath::RandRange(0, _meleeAudios.Num() - 1)], GetActorLocation());
-	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ASuitPlayer::Shoot(EMovablePawnDirection attackDirection)
@@ -244,12 +253,15 @@ void ASuitPlayer::Shoot(EMovablePawnDirection attackDirection)
 			direction *= -1.f;
 		}
 
-		_gunComponent->Shoot(direction);
-
-		if (_gunAudio != nullptr)
+		if (_gunComponent->GetAmmoCount() > 0)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, _gunAudio, _gunComponent->GetComponentLocation());
+			if (_gunAudio != nullptr)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, _gunAudio, _gunComponent->GetComponentLocation());
+			}
 		}
+
+		_gunComponent->Shoot(direction);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
