@@ -9,7 +9,15 @@ enum class ECinematicEventType : uint8
 {
 	None,
 	Office,
-	Elevator
+	OfficeElevator,
+	Garage1,
+	Garage2,
+	Garage3,
+	Garage4,
+	Elevator1,
+	Elevator2,
+	Stairs,
+	FinalLevel
 };
 /*----------------------------------------------------------------------------------------------------*/
 struct FCinematicEventData
