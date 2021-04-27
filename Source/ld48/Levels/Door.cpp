@@ -6,6 +6,7 @@
 #include "LevelManager.h"
 #include "../ld48WorldSettings.h"
 #include "../Player/SuitPlayer.h"
+#include <Kismet/GameplayStatics.h>
 /*----------------------------------------------------------------------------------------------------*/
 ADoor::ADoor()
 {
@@ -78,6 +79,11 @@ void ADoor::OnIsLockedChanged()
 /*----------------------------------------------------------------------------------------------------*/
 void ADoor::Open()
 {
+	if (_openAudio != nullptr)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, _openAudio, GetActorLocation());
+	}
+
 	Ald48WorldSettings* worldSetings = Cast<Ald48WorldSettings>(GetWorldSettings());
 	if (worldSetings == nullptr)
 	{
@@ -95,6 +101,11 @@ void ADoor::Open()
 /*----------------------------------------------------------------------------------------------------*/
 void ADoor::Activate()
 {
+	if (_activateAudio != nullptr)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, _activateAudio, GetActorLocation());
+	}
+
 	_isActive = true;
 
 	_isLocked = false;

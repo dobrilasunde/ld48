@@ -45,7 +45,7 @@ private:
 
 	bool _disabled = true;
 
-	UPROPERTY(EditAnywhere, Category = "Player|Audio")
+	UPROPERTY(EditAnywhere, Category = "Audio")
 	USoundBase* _pickupAudio;
 };
 /*----------------------------------------------------------------------------------------------------*/
