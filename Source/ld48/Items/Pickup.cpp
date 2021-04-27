@@ -7,6 +7,7 @@
 #include "PaperFlipbookComponent.h"
 #include <PaperSpriteComponent.h>
 #include "../Player/SuitPlayer.h"
+#include <Kismet/GameplayStatics.h>
 /*----------------------------------------------------------------------------------------------------*/
 APickup::APickup()
 {
@@ -60,6 +61,10 @@ void APickup::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherA
 	if (ASuitPlayer* player = Cast<ASuitPlayer>(otherActor))
 	{
 		player->AddAmmo(_ammo);
+		if (_pickupAudio != nullptr)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, _pickupAudio, GetActorLocation());
+		}
 		Destroy();
 	}
 }
