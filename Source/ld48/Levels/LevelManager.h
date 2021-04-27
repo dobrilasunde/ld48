@@ -43,16 +43,16 @@ private:
 	ELevelName _initialLevel;
 
 	UPROPERTY(EditDefaultsOnly)
-	ELevelDifficulty _currentLevelDifficulty = ELevelDifficulty::Easy;
-
-	UPROPERTY(EditDefaultsOnly)
 	TMap<ELevelName, TSubclassOf<ALevelPrototype>> _levels;
 
 	UPROPERTY(EditDefaultsOnly)
-	TMap<ELevelDifficulty, int32> _maxEnemySpawnAmountPerDifficulty;
+	int32 _remainingEnemies = 100;
 
 	UPROPERTY(EditDefaultsOnly)
-	int32 _remainingEnemies = 100;
+	int32 _currentMaxEnemySpawnAmount = 8;
+
+	UPROPERTY(EditDefaultsOnly)
+	float _enemySpawnAmountPercentIncreasePerLevel = 1.3;
 
 private:
 	UPROPERTY()

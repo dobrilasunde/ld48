@@ -77,6 +77,11 @@ void ALevelManager::ResetLevels()
 /*----------------------------------------------------------------------------------------------------*/
 ALevelPrototype* ALevelManager::LoadLevel(const ELevelName& level)
 {
+	if (level == ELevelName::LevelGarage)
+	{
+		_currentMaxEnemySpawnAmount = _currentMaxEnemySpawnAmount * _enemySpawnAmountPercentIncreasePerLevel;
+	}
+
 	// Final level
 	if (_remainingEnemies == 0 && level == ELevelName::LevelGarage)
 	{
@@ -145,13 +150,8 @@ APawn* ALevelManager::FindPlayerPawn() const
 /*----------------------------------------------------------------------------------------------------*/
 int32 ALevelManager::GetCurrentLevelEnemySpawnAmount() const
 {
-	int32 spawnAmount = -1;
-	if (!_maxEnemySpawnAmountPerDifficulty.Contains(_currentLevelDifficulty))
-	{
-		return spawnAmount;
-	}
-
-	return _maxEnemySpawnAmountPerDifficulty[_currentLevelDifficulty];
+	int32 newRemainingEnemies = _remainingEnemies - _currentMaxEnemySpawnAmount;
+	return newRemainingEnemies > 0 ? _currentMaxEnemySpawnAmount : _remainingEnemies;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelManager::OnEnemyDied()
