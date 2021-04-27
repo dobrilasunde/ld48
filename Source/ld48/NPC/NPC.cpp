@@ -566,13 +566,13 @@ void ANPC::OnHealthChanged()
 	{
 		SetNPCState(EMovablePawnState::Dying);
 
-// 		if (Ald48WorldSettings* ws = Cast<Ald48WorldSettings>(GetWorldSettings()))
-// 		{
-// 			if (ALevelManager* levelManager = ws->GetLevelManager())
-// 			{
-// 				levelManager->Event_OnNPCDied();
-// 			}
-// 		}
+		if (Ald48WorldSettings* ws = Cast<Ald48WorldSettings>(GetWorldSettings()))
+		{
+			if (ALevelManager* levelManager = ws->GetLevelManager())
+			{
+				levelManager->Event_OnNPCDied();
+			}
+		}
 
 		UGameplayStatics::PlaySoundAtLocation(this, _audioComponent->Sound, GetActorLocation());
 	}

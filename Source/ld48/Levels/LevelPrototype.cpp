@@ -32,6 +32,14 @@ void ALevelPrototype::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 
 	_levelGridGenerator->Destroy();
+
+	for (ANPC* enemy : _spawnedEnemies)
+	{
+		if (!enemy->IsPendingKill())
+		{
+			enemy->Destroy();
+		}
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelPrototype::Tick(float deltaTime)
@@ -70,10 +78,19 @@ void ALevelPrototype::SpawnEnemies(int32 amount)
 			continue;
 		}
 
-		if (GetWorld()->SpawnActor<ANPC>(_enemyClass, spawnMarker->SpawnLocation, FRotator::ZeroRotator))
+		if (ANPC* SpawnedEnemy = GetWorld()->SpawnActor<ANPC>(_enemyClass, spawnMarker->SpawnLocation, FRotator::ZeroRotator))
 		{
+			_spawnedEnemies.Add(SpawnedEnemy);
 			spawnMarker->IsSpawned = true;
 		}
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelPrototype::Event_OnNPCDied()
+{
+	if (_levelGridGenerator)
+	{
+		_levelGridGenerator->Event_OnNPCDied();
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

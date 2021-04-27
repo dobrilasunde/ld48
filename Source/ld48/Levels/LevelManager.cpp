@@ -164,3 +164,11 @@ int32 ALevelManager::GetRemainingEnemies() const
 	return _remainingEnemies;
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ALevelManager::Event_OnNPCDied()
+{
+	if (_currentLevelInstance != nullptr)
+	{
+		_currentLevelInstance->Event_OnNPCDied();
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/

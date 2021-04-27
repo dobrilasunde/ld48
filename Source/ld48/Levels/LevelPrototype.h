@@ -25,6 +25,8 @@ public:
 
 	void SpawnEnemies(int32 amount);
 
+	void Event_OnNPCDied();
+
 // Events
 public:
 	UPROPERTY(EditAnywhere, Category = "LevelPrototype")
@@ -44,5 +46,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ANPC> _enemyClass;
+
+	UPROPERTY(EditAnywhere)
+	TArray<ANPC*> _spawnedEnemies;
 };
 /*----------------------------------------------------------------------------------------------------*/
