@@ -14,6 +14,7 @@ enum class ECinematicEventType : uint8
 	Garage2,
 	Garage3,
 	Garage4,
+	Garage5,
 	Elevator1,
 	Elevator2,
 	Stairs,

@@ -48,6 +48,6 @@ private:
 	TSubclassOf<ANPC> _enemyClass;
 
 	UPROPERTY(EditAnywhere)
-	TArray<ANPC*> _spawnedEnemies;
+	TArray<TWeakObjectPtr<ANPC>> _spawnedEnemies;
 };
 /*----------------------------------------------------------------------------------------------------*/

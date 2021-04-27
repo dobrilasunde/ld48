@@ -33,12 +33,14 @@ void ALevelPrototype::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 	_levelGridGenerator->Destroy();
 
-	for (ANPC* enemy : _spawnedEnemies)
+	for (TWeakObjectPtr<ANPC>& enemy : _spawnedEnemies)
 	{
-		if (!enemy->IsPendingKill())
+		if (!enemy.IsValid())
 		{
-			enemy->Destroy();
+			continue;
 		}
+
+		enemy->Destroy();
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
