@@ -5,6 +5,7 @@
 #include "../Player/SuitPlayerController.h"
 #include "Components/CapsuleComponent.h"
 #include "../Player/Projectile.h"
+#include "../Items/Pickup.h"
 /*----------------------------------------------------------------------------------------------------*/
 AZombieNPC::AZombieNPC(): Super()
 {
@@ -50,5 +51,19 @@ void AZombieNPC::OnArrivedToTarget(AActor* target)
 void AZombieNPC::AttackTarget(AActor* target)
 {
 	Super::AttackTarget(target);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AZombieNPC::OnDeathAnimationFinishedPlaying()
+{
+	if (_pickupClass)
+	{
+		int32 randomNumber = FMath::RandRange(0, 100);
+		if (randomNumber < _dropChance * 100)
+		{
+			APickup* pickup = GetWorld()->SpawnActor<APickup>(_pickupClass, GetActorLocation(), GetActorRotation());
+		}
+	}
+
+	Super::OnDeathAnimationFinishedPlaying();
 }
 /*----------------------------------------------------------------------------------------------------*/

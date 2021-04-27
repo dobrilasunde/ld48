@@ -9,6 +9,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 class UBoxComponent;
 class UPaperSpriteComponent;
+class USoundBase;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LD48_API ADoor : public AActor
@@ -56,5 +57,11 @@ private:
 	bool _isLocked = false;
 	bool _isActive = false;
 	FTimerHandle _isActiveTimerHandle;
+
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	USoundBase* _openAudio;
+
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	USoundBase* _activateAudio;
 };
 /*----------------------------------------------------------------------------------------------------*/

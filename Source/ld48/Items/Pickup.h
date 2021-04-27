@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 class UPaperSpriteComponent;
 class USphereComponent;
+class USoundBase;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LD48_API APickup : public AActor
@@ -43,5 +44,8 @@ private:
 	float _disabledDuration = 2.f;
 
 	bool _disabled = true;
+
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	USoundBase* _pickupAudio;
 };
 /*----------------------------------------------------------------------------------------------------*/
