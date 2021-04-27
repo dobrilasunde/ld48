@@ -170,6 +170,11 @@ void ALevelGridCell::ActivateDoors()
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ALevelGridCell::Event_OnNPCDied()
+{
+	BP_Event_OnNPCDied();
+}
+/*----------------------------------------------------------------------------------------------------*/
 void ALevelGridCell::CollectComponents()
 {
 	TArray<UPaperSpriteComponent*> components;

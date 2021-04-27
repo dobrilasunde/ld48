@@ -52,6 +52,8 @@ public:
 
 	void SaveSpawnMarkers();
 
+	void Event_OnNPCDied();
+
 public:
 	UPROPERTY(EditDefaultsOnly)
 	int32 RowNum = 4;

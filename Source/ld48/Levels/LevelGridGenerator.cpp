@@ -112,6 +112,14 @@ void ALevelGridGenerator::SaveSpawnMarkers()
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ALevelGridGenerator::Event_OnNPCDied()
+{
+	for (ALevelGridCell* SpawnedCell : SpawnedCells)
+	{
+		SpawnedCell->Event_OnNPCDied();
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
 void ALevelGridGenerator::Initialize()
 {
 	_grid.resize(RowNum);

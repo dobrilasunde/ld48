@@ -77,6 +77,10 @@ public:
 
 	void ActivateDoors();
 
+	void Event_OnNPCDied();
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_Event_OnNPCDied();
+
 private:
 	UPaperSpriteComponent* _leftEdgeComp_Wall;
 	UPaperSpriteComponent* _rightEdgeComp_Wall;

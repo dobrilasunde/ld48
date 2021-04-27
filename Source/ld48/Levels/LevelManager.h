@@ -28,6 +28,8 @@ public:
 	void OnEnemyDied();
 	int32 GetRemainingEnemies() const;
 
+	void Event_OnNPCDied();
+
 private:
 	ALevelPrototype* LoadLevel(const ELevelName& level);
 	void UnloadCurrentLevel();
